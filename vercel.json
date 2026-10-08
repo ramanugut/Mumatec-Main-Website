@@ -1,9 +1,22 @@
 {
+  "framework": null,
+  "buildCommand": "",
+  "outputDirectory": "public",
   "cleanUrls": true,
-  "rewrites": [
-    {
-      "source": "/((?!styles.css|app.js|favicon.ico|robots.txt|sitemap.xml).*)",
-      "destination": "/index.html"
-    }
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/contacts", "destination": "/contact", "permanent": true },
+    { "source": "/web-design", "destination": "/websites", "permanent": true },
+    { "source": "/client-area", "destination": "https://mumatechosting.co.za/billing/clientarea.php", "permanent": false },
+    { "source": "/privacy", "destination": "https://mumatechosting.co.za/refund_returns/", "permanent": false },
+    { "source": "/terms", "destination": "https://mumatechosting.co.za/refund_returns/", "permanent": false },
+    { "source": "/acceptable-use", "destination": "https://mumatechosting.co.za/refund_returns/", "permanent": false }
+  ],
+  "headers": [
+    { "source": "/(.*)", "headers": [
+      { "key": "X-Content-Type-Options", "value": "nosniff" },
+      { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+    ]},
+    { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }] }
   ]
 }

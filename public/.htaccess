@@ -1,0 +1,22 @@
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+<IfModule mod_rewrite.c>
+RewriteEngine On
+# Preserve the PHP billing application and existing legacy/legal content.
+RewriteRule ^billing(?:/|$) - [L]
+RewriteRule ^contacts/?$ /contact [R=301,L]
+RewriteRule ^web-design/?$ /websites [R=301,L]
+RewriteRule ^web-hosting/?$ /hosting [R=301,L]
+RewriteRule ^email-hosting/?$ /email [R=301,L]
+RewriteRule ^ssl-certificates/?$ /ssl [R=301,L]
+RewriteRule ^client-area/?$ /billing/clientarea.php [R=302,L]
+RewriteRule ^(?:terms|privacy|acceptable-use)/?$ /refund_returns/ [R=302,L]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^([a-z-]+)/?$ $1.html [L]
+</IfModule>
+<IfModule mod_headers.c>
+Header always set X-Content-Type-Options "nosniff"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
