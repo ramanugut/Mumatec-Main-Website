@@ -4,6 +4,8 @@ ErrorDocument 404 /404.html
 RewriteEngine On
 # Preserve the PHP billing application and existing legacy/legal content.
 RewriteRule ^billing(?:/|$) - [L]
+# Transitional legacy policy/application routes, until their approved exports are static.
+RewriteRule ^(?:refund_returns|free-website-form)(?:/|$) /index.php [L]
 RewriteRule ^contacts/?$ /contact [R=301,L]
 RewriteRule ^web-design/?$ /websites [R=301,L]
 RewriteRule ^web-hosting/?$ /hosting [R=301,L]

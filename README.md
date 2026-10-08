@@ -27,3 +27,7 @@ Back up the current files/database, validate native checkout/domain lookup/conta
 ## Provenance
 
 Original PNG and Manager colours: `ramanugut/MumatecManager` tree `d9f538fa6e2f53a2c05e53e9c0157db8c310566e`. The logo is unchanged; CSS crops its existing transparent canvas using Manager's crop. Shared `brand.css` matches the client theme byte for byte. Images are original generated artwork: a conceptual hosting sculpture and an illustrative business workspace, not photographs of Mumatec infrastructure or customers. Manager itself is untouched.
+
+## Design review
+
+`/design-preview/` embeds the actual static website and clearly labelled client visual fixtures at 320/390/768/1200px. Client fixtures are generated from the client-area repository; update them from that repo when changing its theme. This preview does not run Smarty, WHMCS authentication or payments.
