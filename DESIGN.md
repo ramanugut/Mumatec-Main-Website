@@ -22,9 +22,9 @@ omitted:
 # Mumatec Hosting
 
 ## Overview
-Preserve the Mumatec navy / cyan identity, 14px cards and glossy highlights from ramanugut/MumatecManager. The user requested a text recreation of the two-line wordmark in locally served Montserrat. The public website serves South African business owners. This iteration is an isolated main-site demo; client-area work is paused. Published existing offers provide the demo baseline. No invented testimonials or operational guarantees.
+Preserve the Mumatec navy / cyan identity, 14px cards and glossy highlights from ramanugut/MumatecManager. The user requested a text recreation of the two-line wordmark in locally served Montserrat. The public website serves South African business owners. The main site is reviewed as a standalone website; the client-area rebuild is separate. Use published offers and avoid invented testimonials or operational guarantees.
 
-The main-site signature is a navy / blue business headline, original server sculpture, full-width search dock and three clear package cards. On phones the business decision and search come before the illustration. Paid website design uses an illustrative workspace. Avoid purple accents, fake dashboards and excessive badges.
+The main-site signature is a concise navy hero, warm editorial image of a small business owner, full-width domain search dock and three clear package cards. On phones the business decision comes before the image and domain search. Paid website design uses an illustrative workspace. Avoid purple accents, fake dashboards and excessive badges.
 
 ## Colors
 Runtime ownership (Model B): public/assets/brand.css in the main website and templates/mumatec/css/brand.css in the client area are identical copies of the portable brand-kit snapshot. These adapt MumatecManager's accepted tokens without importing its admin code. Keep them byte-identical when changing the shared kit. Primary #105479 maps to --ac; background #f0f6f9 to --bg; surface #ffffff to --card-bg; text #12364a to --tx; secondary #4e6777 to --tx2; muted #5e7381 to --tx3; cyan #38a8c8 to --cyan. White --on-ac is the foreground for blue filled controls. Error/success/warning roles use separate semantic variables.
@@ -49,7 +49,7 @@ WHMCS owns forms, server validation, authentication, authorisation, billing acti
 Buttons have hover, focus and pressed states; disabled buttons are visibly inactive. Error copy sits next to the domain field with a live region. Demo forms and account actions are isolated locally. Orders, payments and credentials remain disabled. Native WHMCS selects and date fields retain their platform popup behavior. Reduced motion and forced colours are supported by brand.css.
 
 ## Do's and Don'ts
-Main website: use the approved Montserrat text recreation; client repository remains unchanged and paused. Keep all real billing, permissions and account lifecycle actions disconnected during review. Show existing published prices as clearly labelled demo values. Never claim sample domain results are real availability, an enquiry was sent, or a payment succeeded. Do not expose the Manager admin bridge or staff authentication.
+Main website: use the approved Montserrat text recreation; client repository remains separate. Keep billing, permissions and account lifecycle actions disconnected during review. Show current published prices with clear billing terms. Never claim a domain is available, an enquiry was sent, or a payment succeeded. Do not expose the Manager admin bridge or staff authentication.
 
 ## Main-site attention colours
 The user approved relevant supporting colours. The isolated marketing site uses warm coral #b54b2b for principal actions and the selected billing cycle, #94381e for hover, #fff3eb for the middle package surface and #fbf6f0 for the business / email storytelling surface. Navy / cyan remain the wordmark and identity. White action text exceeds 4.5:1 contrast. Colour is paired with labels, borders and input state; it is not the sole indication of selection. These are main-site extensions, not changes to the paused client kit.
