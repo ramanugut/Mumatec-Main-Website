@@ -122,7 +122,8 @@ PAGES['pricing.html'] = ('Hosting plans', 'Compare monthly and yearly Mumatec ho
 PAGES['faq.html'] = ('Frequently asked questions', 'Answers to common Mumatec hosting, domain and email questions.', support)
 PAGES['websites.html'] = PAGES['web-design.html']
 for path,(title,description,render) in PAGES.items():
-    canonical=CONFIG['origin'] + ('/' if path=='index.html' else '/'+path.removesuffix('.html'))
+    canonical_path = {'web-design.html':'websites.html', 'pricing.html':'hosting.html', 'faq.html':'support.html'}.get(path,path)
+    canonical=CONFIG['origin'] + ('/' if canonical_path=='index.html' else '/'+canonical_path.removesuffix('.html'))
     content=f'''<!doctype html>
 <html lang="en-ZA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(title)} | Mumatec Hosting</title><meta name="description" content="{e(description)}">
@@ -132,5 +133,5 @@ for path,(title,description,render) in PAGES.items():
 </head><body>{header(path)}<main id="main">{render()}</main>{footer()}</body></html>'''
     (OUT/path).write_text(content,encoding='utf-8')
 (OUT/'404.html').write_text(f'''<!doctype html><html lang="en-ZA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Page not found | Mumatec Hosting</title><meta name="robots" content="noindex"><link rel="stylesheet" href="/assets/site.css"><link rel="icon" href="/assets/mumatec-logo.png"></head><body><main class="wrap section"><p class="eyebrow">404</p><h1>That page isn’t here.</h1><p>The address may have changed. Start from the homepage or contact us for help.</p>{btn('Back to home','/',True)} {btn('Contact us','/contact.html')}</main></body></html>''',encoding='utf-8')
-(OUT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join(f'<url><loc>{e(CONFIG["origin"]+("/" if path=="index.html" else "/"+path.removesuffix('.html')))}</loc></url>' for path in PAGES)+'</urlset>\n')
+(OUT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join(f'<url><loc>{e(CONFIG["origin"]+("/" if path=="index.html" else "/"+path.removesuffix('.html')))}</loc></url>' for path in PAGES if path not in {"web-design.html", "pricing.html", "faq.html"})+'</urlset>\n')
 print(f'Built {len(PAGES)} pages + 404 and sitemap.')
