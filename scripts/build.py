@@ -1,6 +1,8 @@
 """Build a dependency-free website that can be uploaded directly to shared hosting."""
 import html
 import json
+import hashlib
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -8,6 +10,7 @@ OUT = ROOT / 'public'
 OUT.mkdir(exist_ok=True)
 CONFIG = json.loads((ROOT / 'site.json').read_text())
 def e(value): return html.escape(str(value), quote=True)
+def asset(path): return path + '?v=' + hashlib.sha256((OUT/path).read_bytes()).hexdigest()[:12]
 def billing(path):
     # Deliberately isolated review build. No PHP, account or order endpoints are called.
     if 'domain=transfer' in path: return 'domain-search.html?mode=transfer'
@@ -177,9 +180,13 @@ for path,(title,description,render) in PAGES.items():
 <title>{e(title)} | Mumatec Hosting</title><meta name="description" content="{e(description)}"><meta name="robots" content="noindex, nofollow">
 <link rel="canonical" href="{e(canonical)}"><meta name="theme-color" content="#105479"><meta property="og:type" content="website"><meta property="og:site_name" content="Mumatec Hosting"><meta property="og:title" content="{e(title)} | Mumatec Hosting"><meta property="og:description" content="{e(description)}"><meta property="og:url" content="{e(canonical)}"><meta property="og:image" content="{e(CONFIG['origin'])}/assets/hosting-studio-1536.webp"><meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/mumatec-logo.png" type="image/png">
-<link rel="preload" href="assets/fonts/montserrat-wordmark.woff" as="font" type="font/woff" crossorigin><link rel="stylesheet" href="assets/site.css"><script src="assets/site.js" defer></script><script type="application/json" id="demo-catalogue">{json.dumps({'hosting':CONFIG['hostingPlans'],'domains':CONFIG['domainExamples']}).replace('<', '&lt;')}</script>
+<link rel="preload" href="assets/fonts/montserrat-wordmark.woff" as="font" type="font/woff" crossorigin><link rel="stylesheet" href="{asset('assets/site.css')}"><script src="{asset('assets/site.js')}" defer></script><script type="application/json" id="demo-catalogue">{json.dumps({'hosting':CONFIG['hostingPlans'],'domains':CONFIG['domainExamples']}).replace('<', '&lt;')}</script>
 </head><body>{header(path)}<main id="main">{render()}</main>{footer()}</body></html>'''
     (OUT/path).write_text(content,encoding='utf-8')
-(OUT/'404.html').write_text(f'''<!doctype html><html lang="en-ZA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Page not found | Mumatec Hosting</title><meta name="robots" content="noindex"><link rel="stylesheet" href="/assets/site.css"><link rel="icon" href="/assets/mumatec-logo.png"></head><body><main class="wrap section"><p class="eyebrow">404</p><h1>That page isn’t here.</h1><p>The address may have changed. Start from the homepage or contact us for help.</p>{btn('Back to home','/',True)} {btn('Contact us','/contact.html')}</main></body></html>''',encoding='utf-8')
+(OUT/'404.html').write_text(f'''<!doctype html><html lang="en-ZA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Page not found | Mumatec Hosting</title><meta name="robots" content="noindex"><link rel="stylesheet" href="/{asset('assets/site.css')}"><link rel="icon" href="/assets/mumatec-logo.png"></head><body><main class="wrap section"><p class="eyebrow">404</p><h1>That page isn’t here.</h1><p>The address may have changed. Start from the homepage or contact us for help.</p>{btn('Back to home','/',True)} {btn('Contact us','/contact.html')}</main></body></html>''',encoding='utf-8')
 (OUT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join(f'<url><loc>{e(CONFIG["origin"]+("/" if path=="index.html" else "/"+path.removesuffix('.html')))}</loc></url>' for path in PAGES if path not in {"web-design.html", "pricing.html", "faq.html"})+'</urlset>\n')
 print(f'Built {len(PAGES)} pages + 404 and sitemap.')
+review_path=OUT/'design-preview/index.html'
+review_html=review_path.read_text()
+review_html=re.sub(r'(href|src)="(/design-preview/review\.(?:css|js))(?:\?v=[a-f0-9]+)?"',lambda m:f'{m[1]}="/{asset(m[2].lstrip("/"))}"',review_html)
+review_path.write_text(review_html)

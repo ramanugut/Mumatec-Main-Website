@@ -18,7 +18,7 @@ npm install --prefix /tmp/mumatec-demo-qa jsdom@22.1.0 --ignore-scripts --no-aud
 NODE_PATH=/tmp/mumatec-demo-qa/node_modules node scripts/test_demo.cjs
 ```
 
-The test dependency is outside the website. The deployed site has no package or server requirement; generated pages are committed. Vercel serves `public/` with clean URLs. Apache supports the same folder and provided redirects. This is a review demo; do not upload it over live billing.
+The test dependency is outside the website. The deployed site has no package or server requirement; generated pages are committed. Vercel serves `public/` with clean URLs. CSS and JavaScript URLs carry content fingerprints so review pages cannot retain incompatible assets from a previous version. Apache supports the same folder and provided redirects. This is a review demo; do not upload it over live billing.
 
 Batch substantial changes before pushing. The existing Git integration triggers Vercel on pushes; do not deploy every edit or redeploy unchanged code. Update review results in the PR without another code push.
 
