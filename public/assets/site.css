@@ -404,6 +404,8 @@ p,.footer-grid a { overflow-wrap: anywhere; }
 .mail-avatar { background: var(--action-bg); }
 .mail-preview { background: #fbf6f0; }
 .btn:disabled,.btn:disabled:hover { background: var(--card2); border-color: var(--line); color: var(--tx3); box-shadow: none; }
+.summary-total { flex-wrap: wrap; }
+.summary-total strong { max-width: 100%; overflow-wrap: anywhere; font-size: clamp(1.5rem,6vw,2.25rem); }
 @media (max-width: 1100px) { .brand { --brand-width: 160px; } }
-@media (max-width: 640px) { .brand { --brand-width: 135px; gap: 4px; } }
-@media (max-width: 360px) { .brand { --brand-width: 115px; } }
+@media (max-width: 640px) { .brand { --brand-width: 135px; gap: 4px; } .hero .actions .btn { font-size: .875rem; } }
+@media (max-width: 360px) { .brand { --brand-width: 115px; } .header-client,.menu-toggle { padding-inline: .5rem; } }
