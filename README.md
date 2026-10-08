@@ -1,31 +1,30 @@
-# Mumatec main website — review demo
+# Mumatec main website
 
-A self-contained, WordPress-free redesign for review before connecting real data. Client-area work is paused. Thirteen canonical pages, three compatibility aliases and a 404 cover the public site, sample domain search, order review and account entry. Two original illustrations are served as responsive WebP images.
+A standalone, WordPress-free rebuild of the Mumatec Hosting website. This branch is for design review; its homepage opens at / like a normal website. It preserves the two-line Montserrat Mumatec wordmark and blue brand, with coral actions, warm highlights and original responsive imagery.
 
-## Review
-`/design-preview` offers all main-site screens at 320, 390, 768 and 1200 px, plus 200% text. The normal homepage is `/`. Compare packages, switch monthly / full annual billing, select a package and review a local order. Search for sample domain results; real availability is not claimed. Enquiry forms show local feedback without sending or saving anything. Account credentials and payments remain disabled. Call / email links open the user's device applications.
+The public site includes hosting, domain search and transfers, business email, website design, SSL, help, contact, account information and pricing pages, plus compatible legacy URLs and a 404 page. The homepage leads with hosting packages and gives customers direct paths to domain search and support.
 
-No free-website promotion, fabricated reviews, customer counts, uptime guarantee or infrastructure photograph is included. All pages are noindex. There are no active billing links, API requests, payment actions, analytics or form-storage endpoints. Inactive former billing configuration is retained for future planning only. Form submit buttons stay disabled if local JavaScript fails to load.
+## Customer journeys
 
-## Develop
-Edit `site.json` for demo offers / contact details, `scripts/build.py` for content and `public/assets/site.css` for layout. `brand.css` is the unchanged Manager token snapshot. Run:
+Hosting packages show monthly charges and full annual amounts. The domain search page presents a price guide without claiming live availability. Package selection calculates an estimated first-term price and prepares a request in the customer's email app. The contact form also prepares an email; the customer reviews and sends it from their own mail client. The customer portal page points existing customers to direct support while the portal is rebuilt.
 
-```sh
-python scripts/build.py
-python scripts/check_site.py
-node --check public/assets/site.js
-npm install --prefix /tmp/mumatec-demo-qa jsdom@22.1.0 --ignore-scripts --no-audit --no-fund
-NODE_PATH=/tmp/mumatec-demo-qa/node_modules node scripts/test_demo.cjs
-```
+This review branch is not connected to WHMCS, domain lookup, customer accounts, payments, ticket creation, analytics or form storage. No message is sent until a customer chooses Send in their email app. Hosting and website design prices follow the published Mumatec offers; domain prices are guides and require confirmation. Confirm the current catalogue, tax treatment and renewal terms before enabling live orders.
 
-The test dependency is outside the website. The deployed site has no package or server requirement; generated pages are committed. Vercel serves `public/` with clean URLs. CSS and JavaScript URLs carry content fingerprints so review pages cannot retain incompatible assets from a previous version. Apache supports the same folder and provided redirects. This is a review demo; do not upload it over live billing.
+## Develop and verify
 
-Batch substantial changes before pushing. The existing Git integration triggers Vercel on pushes; do not deploy every edit or redeploy unchanged code. Update review results in the PR without another code push.
+Edit site.json for contact details and published package baselines, scripts/build.py for page content, and public/assets/site.css for layout. brand.css retains the MumatecManager token snapshot. Run:
 
-## Provenance
-The existing Mumatec homepage, retrieved on 8 October 2026, publishes monthly R59 / R79 / R120 and annual R638 / R854 / R1 296, for 15 / 30 / 60 GB and 2 / 3 / 5 websites. Paid website offers are R2 599 and R3 699. The user approved those prices as the demo baseline. Preserve the actual annual amounts and calculate savings from them; do not repeat the old rounded 10% claim. Start-Up 15 / 30 / 60 are clarified review labels, not verified WHMCS product IDs. Domain prices are examples from the indexed catalogue; it disagrees with the old homepage on some prices, so approval and live verification are required.
+    python scripts/build.py
+    python scripts/check_site.py
+    node --check public/assets/site.js
+    NODE_PATH=/tmp/mumatec-demo-qa/node_modules node scripts/test_site.cjs
 
-Manager colours and original PNG come from `ramanugut/MumatecManager`, tree `d9f538fa6e2f53a2c05e53e9c0157db8c310566e`. The user requested a text wordmark in Montserrat; its two-line navy / cyan identity is preserved. The local 12 KB Google Fonts subset includes the SIL Open Font License. The original PNG remains for reference and the favicon. The server sculpture and workspace are original generated illustrations, not Mumatec facilities or customer projects. Manager and the client repository are unchanged by this update.
+The website is static and has no runtime package or server requirement. Generated pages are committed and Vercel serves public/ with clean URLs. Apache redirects are also provided. The content-fingerprinted CSS and JavaScript URLs prevent browsers from mixing assets between releases.
 
-## After approval
-Confirm actual products, prices, tax treatment, domain renewals, dedicated email / SSL offers, legal policies and business details. Then connect the approved service / account / enquiry / checkout workflows in staging. Resolve the PHP billing hostname before a root-domain move. See `LAUNCH_CHECKLIST.md` and `UX-CONTRACT.md`.
+Batch substantial changes before updating the review branch to limit Vercel deployments. Do not merge this draft or point production at it before design approval and service verification.
+
+## Price and brand provenance
+
+Published hosting prices are R59 / R79 / R120 per month and R638 / R854 / R1 296 per year, for 15 / 30 / 60 GB storage and 2 / 3 / 5 websites. Published website design offers are R2 599 and R3 699. Plan names in this redesign are presentation names, not verified WHMCS product IDs. Preserve the actual annual amounts and calculate savings from them.
+
+The original logo reference, brand colours and token snapshot come from ramanugut/MumatecManager. The user requested the same simple Montserrat text wordmark, retained here in navy and cyan. The portal artwork and workspace images are original generated illustrations, not photographs of Mumatec facilities or customer projects.

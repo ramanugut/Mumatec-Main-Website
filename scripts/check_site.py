@@ -17,7 +17,7 @@ class Page(HTMLParser):
         if tag=='meta' and a.get('name')=='robots' and 'noindex' in a.get('content',''): self.robots=True
         for key in ('href','src','action'):
             if a.get(key) and not (tag=='link' and a.get('rel')=='canonical'): self.refs.append(a[key])
-        if tag=='img' and (not a.get('alt') or not a.get('width') or not a.get('height')): errors.append(f'{self.path}: image semantics')
+        if tag=='img' and ('alt' not in a or not a.get('width') or not a.get('height')): errors.append(f'{self.path}: image semantics')
         if tag=='iframe' and not a.get('title'): errors.append(f'{self.path}: iframe title')
 pages={}
 for path in PUBLIC.rglob('*.html'):
@@ -41,6 +41,6 @@ for css in PUBLIC.rglob('*.css'):
         if not ref.startswith('data:') and not (css.parent/ref).exists(): errors.append(f'{css}: missing CSS asset {ref}')
 config=json.loads((ROOT/'vercel.json').read_text())
 if any(urlsplit(item['destination']).scheme for item in config['redirects']): errors.append('External deployment redirect')
-if (PUBLIC/'design-preview/client').exists(): errors.append('Client area must remain outside this review')
+if (PUBLIC/'design-preview').exists(): errors.append('Public review shell must not be published')
 if errors: raise SystemExit('\n'.join(errors))
 print(f'{len(pages)} HTML documents passed: local routes / assets / anchors, unique IDs, headings, noindex and isolation.')

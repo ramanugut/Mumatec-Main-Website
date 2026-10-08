@@ -1,22 +1,25 @@
-# Main website demo contract
+# Mumatec main website contract
 
 ## Scope
-Only the main website is under active review; client-area work is paused. No live account, billing, message-submission or payment connection is allowed. No input is persisted. Prices are review values from existing published offers, not a live quote. Call / email links are ordinary device actions.
+Only the main website is under active review; the client-area rebuild is paused. The pages remain static and are not connected to WHMCS, customer accounts, domain availability, payments, ticket creation, analytics or form storage. Email and phone links open the customer's own applications. A contact or setup request is prepared for review; it is sent only if the customer chooses Send in their email app.
 
 ## Journeys and boundaries
-| Journey | Review outcome | Error / truth boundary |
+| Journey | Customer outcome | Clarity / truth boundary |
 | --- | --- | --- |
-| Hosting | Three packages, monthly / full annual billing, local order review | Preserve selection; reject unknown query values; no payment |
-| Domains | Empty / sample search, domain-only order preview | Validate input; escape query text; availability is not checked |
-| Transfer | Proposed steps and local enquiry | No transfer or ownership check |
-| Website design | Two paid offers or custom enquiry | No retired free offer or copied portfolio proof |
-| Email / SSL | Service information and local enquiry | No invented dedicated prices / included certificate promise |
-| Support | FAQs, enquiry preview, account-entry presentation | No ticket claimed to be sent |
-| Contact | Required fields, local feedback, reset | Submit enabled only after local JS loads; nothing sent / saved |
-| Account | Sign-in / register / reset presentation | Credential inputs and actions disabled; client rebuild paused |
+| Hosting | Compare three plans, monthly versus full annual billing, and package limits | Preserve chosen plan and cycle; show the full annual charge; domains and separate services cost extra |
+| Domains | Search a business name and compare published extension price guides | Do not claim availability; confirm current price, transfer requirements and renewals before registration |
+| Hosting setup | Select a plan, billing cycle and domain, then request the setup | Show an estimated amount; confirm current total, taxes, availability and renewal before setup; no order or payment is created |
+| Website design | Compare paid website packages or ask about a custom scope | Confirm pages, content and scope before work; hosting and domains cost extra |
+| Email / SSL | Understand possible coverage and request help | Do not invent separate email prices or imply an SSL certificate is included |
+| Support | Find common answers and direct contact routes | Do not imply a ticket was filed |
+| Contact | Prepare a service enquiry in the customer's email app | Keep details editable in the app; give a send step the customer controls; do not store form input |
+| Customer account | Explain account access and provide direct support contact | Portal is not available until the separate client-area work is complete; collect no credentials |
 
 ## Layout and accessibility
-Navigation collapses below 900 px. Mobile puts the business decision and domain search before the illustration. Packages stack below 700 px. Controls are labelled and at least 44 px tall. Search errors sit by the field. Escape closes the menu and restores focus. FAQs use native details / summary. Billing changes and totals announce updates; local review completion moves focus to its message. The utility supports 200% text review and embeds same-origin main pages only.
+Main navigation collapses below 900 px. Domain search, pricing and support remain easy to find. Hosting packages stack on narrow phones. Form controls are labelled and at least 44 px tall. Search errors stay by their field. Escape closes the mobile menu and restores focus. Billing and estimate changes are announced to assistive technology; FAQs use native details/summary controls. Respect reduced-motion preferences and avoid horizontal overflow at 320 px.
 
 ## Verification
-Run route / asset / heading / anchor / isolation checks and interaction assertions before a batched push. Then inspect real rendering, font / image loading, keyboard behavior and overflow at 320 / 390 / 768 / 1200 px and 200% text. Record actual results and limitations in the draft PR. Do not infer real-service acceptance or conversion uplift from demo checks.
+Run static route / asset / anchor / heading checks and interaction assertions before one batched review update. Inspect the deployed normal homepage and customer journeys at desktop and phone widths, check font and image loading, keyboard use and overflow. Report the exact checks performed. Do not infer production readiness or conversion improvement from this review.
+
+## Copy standard
+Every visible line must help a customer understand an offer, choose a service, take a next step or avoid a real surprise. Remove interface narration and repeat warnings. Keep any limit next to the decision it affects, and label buttons for the action they open.

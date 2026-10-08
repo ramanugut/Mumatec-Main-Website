@@ -1,9 +1,7 @@
-# Main-site demo validation — 8 October 2026
+# Main-site review verification — 8 October 2026
 
-The previous integration draft is replaced by an isolated demo. Client-area work is paused. Earlier screenshots describe the earlier draft and are not evidence for this version.
+The review surface is the website root. The public design-review wrapper has been removed, and generated pages use customer-facing headings and action labels.
 
-Before the batched push: generated routes / assets / anchors / noindex / semantics / isolation checks, JavaScript syntax, and 55 local interaction assertions. Assertions cover billing and selection carry-over; invalid search / clearing; domain-only and hosting totals; invalid URL parameters; review / disabled payment; enquiry reset; disabled credentials; and Escape dismissal.
+Local verification passes: the static checker validates 17 HTML documents, their routes, assets, anchors, headings, noindex metadata and isolated service links. JavaScript syntax passes. The browser-independent interaction suite passes 61 assertions for monthly/annual pricing, totals, domain-name validation, price-guide results, email-request links, enquiry preparation, account messaging, and keyboard menu behavior. The test uses jsdom and blocks fetch / XHR; it creates no orders, payments, accounts, tickets or sent messages.
 
-The actual public JavaScript is exercised with jsdom without loading remote resources. This does not validate CSS layout or WHMCS. Browser checks follow the single substantial preview update; actual results will be recorded in the draft PR and saved review images. No order, payment, message, ticket or account is created.
-
-Afrihost's current shared-hosting page was inspected directly. Its strengths include package clarity, direct selection, detailed service information and substantial customer proof. This demo addresses package clarity with three focused cards and full annual amounts; prioritises phone domain search; carries selections into review; and uses an original Mumatec visual direction. It does not claim Afrihost's track record or reviews. Visual preference is not proof of improved conversion.
+The domain page shows a price guide, not live availability. The setup page calculates an estimate and prepares an email request that the customer can review before sending. Account and billing systems are not connected. Visual preference and conversion impact have not been measured.

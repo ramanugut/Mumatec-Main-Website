@@ -39,21 +39,19 @@ document.querySelectorAll('.domain-form').forEach(form => {
 });
 document.querySelectorAll('[data-year]').forEach(node => { node.textContent = String(new Date().getFullYear()); });
 
-// The demo is intentionally local: no fetches, credentials, persistence or live checkout.
-const demoCatalogue = JSON.parse(document.querySelector('#demo-catalogue')?.textContent || '{"hosting":[],"domains":[]}');
+const catalogue = JSON.parse(document.querySelector('#service-catalogue')?.textContent || '{"hosting":[],"domains":[]}');
 const parameters = new URLSearchParams(window.location.search);
-if (parameters.get('review-text') === '200') document.documentElement.style.fontSize = '200%';
 const formatMoney = value => 'R' + Number(value).toLocaleString('en-ZA', {minimumFractionDigits: Number.isInteger(Number(value)) ? 0 : 2, maximumFractionDigits: 2});
 function updateBilling(cycle) {
   document.querySelectorAll('.plan-card[data-plan]').forEach(card => {
-    const plan = demoCatalogue.hosting.find(item => item.id === card.dataset.plan);
+    const plan = catalogue.hosting.find(item => item.id === card.dataset.plan);
     if (!plan) return;
     const yearly = cycle === 'yearly';
     card.querySelector('[data-plan-price]').textContent = Number(plan[cycle]).toLocaleString('en-ZA');
     card.querySelector('[data-plan-period]').textContent = yearly ? '/ year' : '/ month';
     card.querySelector('[data-plan-charge]').textContent = yearly ? 'Full annual payment, paid upfront.' : 'Billed monthly.';
-    card.querySelector('[data-plan-saving]').textContent = `${yearly ? 'Save' : 'Annual option: save'} ${formatMoney(plan.monthly * 12 - plan.yearly)} over 12 monthly payments.`;
-    card.querySelector('[data-plan-link]').href = `checkout.html?plan=${encodeURIComponent(plan.id)}&cycle=${cycle}`;
+    card.querySelector('[data-plan-saving]').textContent = (yearly ? 'Save' : 'Annual option: save') + ' ' + formatMoney(plan.monthly * 12 - plan.yearly) + ' over 12 monthly payments.';
+    card.querySelector('[data-plan-link]').href = 'checkout.html?plan=' + encodeURIComponent(plan.id) + '&cycle=' + cycle;
   });
   const feedback = document.querySelector('[data-billing-feedback]');
   if (feedback) feedback.textContent = cycle === 'yearly' ? 'Annual prices displayed. The full year is paid upfront.' : 'Monthly prices displayed.';
@@ -71,15 +69,16 @@ if (domainResults) {
   const searchInput = document.querySelector('.domain-form [name="query"]');
   const valid = query.length > 0 && query.length <= 253 && query.split('.').every(label => /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label));
   const transfer = parameters.get('mode') === 'transfer';
-  document.querySelector('[data-transfer-preview]').hidden = !transfer;
-  document.querySelector('[data-domain-empty]').hidden = transfer || valid;
+  const transferPanel = document.querySelector('[data-transfer-panel]');
+  if (transferPanel) transferPanel.hidden = !transfer;
   if (query) {
     searchInput.value = query;
     document.querySelector('.clear-search').hidden = false;
   }
   if (valid && !transfer) {
+    document.querySelector('[data-domain-notice]').hidden = false;
     let name = query;
-    const matching = demoCatalogue.domains.find(item => query.endsWith('.' + item.extension));
+    const matching = catalogue.domains.find(item => query.endsWith('.' + item.extension));
     if (matching) name = query.slice(0, -(matching.extension.length + 1));
     else if (query.includes('.')) name = query.slice(0, query.lastIndexOf('.'));
     const make = (tag, className, content) => {
@@ -88,15 +87,15 @@ if (domainResults) {
       if (content) element.textContent = content;
       return element;
     };
-    demoCatalogue.domains.forEach(example => {
+    catalogue.domains.forEach(example => {
       const domain = name + '.' + example.extension;
       const row = make('article', 'domain-result');
       const identity = make('div');
-      identity.append(make('h2', '', domain), make('p', '', 'Example result · availability not checked'));
+      identity.append(make('h2', '', domain));
       const price = make('div', 'domain-result-price');
-      price.append(make('strong', '', formatMoney(example.price)), make('span', '', '/ year · sample price'));
-      const link = make('a', 'btn btn-primary', 'Add to demo order ↗');
-      link.href = `checkout.html?plan=domain-only&domain=${encodeURIComponent(domain)}&extension=${encodeURIComponent(example.extension)}`;
+      price.append(make('strong', '', formatMoney(example.price)), make('span', '', 'per year · guide'));
+      const link = make('a', 'btn btn-primary', 'Ask about this domain ↗');
+      link.href = 'checkout.html?plan=domain-only&domain=' + encodeURIComponent(domain) + '&extension=' + encodeURIComponent(example.extension);
       row.append(identity, price, link);
       domainResults.append(row);
     });
@@ -106,7 +105,7 @@ if (domainResults) {
   }
 }
 
-const checkoutForm = document.querySelector('[data-demo-checkout]');
+const checkoutForm = document.querySelector('[data-checkout]');
 if (checkoutForm) {
   checkoutForm.querySelector('[type="submit"]').disabled = false;
   const planField = checkoutForm.elements.plan;
@@ -116,78 +115,96 @@ if (checkoutForm) {
   const extensionField = checkoutForm.elements.extension;
   const review = document.querySelector('[data-order-review]');
   const error = checkoutForm.querySelector('.checkout-error');
-  const knownPlan = demoCatalogue.hosting.find(item => item.id === parameters.get('plan'));
+  const knownPlan = catalogue.hosting.find(item => item.id === parameters.get('plan'));
   if (knownPlan || parameters.get('plan') === 'domain-only') planField.value = parameters.get('plan');
   if (parameters.get('cycle') === 'yearly') cycleField.value = 'yearly';
   if (parameters.get('domain')) {
-    domainField.value = parameters.get('domain').slice(0,253);
+    domainField.value = parameters.get('domain').slice(0, 253);
     domainChoice.value = 'register';
   }
-  if (demoCatalogue.domains.some(item => item.extension === parameters.get('extension'))) extensionField.value = parameters.get('extension');
+  if (catalogue.domains.some(item => item.extension === parameters.get('extension'))) extensionField.value = parameters.get('extension');
   function refreshSummary() {
     const domainOnly = planField.value === 'domain-only';
     if (domainOnly) { domainChoice.value = 'register'; cycleField.value = 'yearly'; }
     cycleField.disabled = domainOnly;
     domainChoice.disabled = domainOnly;
-    const plan = demoCatalogue.hosting.find(item => item.id === planField.value) || demoCatalogue.hosting[0];
+    const plan = catalogue.hosting.find(item => item.id === planField.value) || catalogue.hosting[0];
     const yearly = cycleField.value === 'yearly';
     const registration = domainChoice.value === 'register';
-    const domainExample = demoCatalogue.domains.find(item => item.extension === extensionField.value);
-    const domainPrice = registration ? domainExample.price : 0;
+    const domainName = (domainField?.value || '').trim().toLowerCase();
+    const matchingDomain = registration && catalogue.domains.find(item => domainName.endsWith('.' + item.extension));
+    if (matchingDomain) extensionField.value = matchingDomain.extension;
+    const domainExample = registration ? catalogue.domains.find(item => item.extension === extensionField.value) : null;
+    const knownDomainPrice = Boolean(registration && matchingDomain && domainExample && matchingDomain.extension === domainExample.extension);
+    const domainPrice = knownDomainPrice ? domainExample.price : 0;
     const hostingPrice = domainOnly ? 0 : plan[cycleField.value];
     document.querySelector('[data-checkout-domain-fields]').hidden = domainChoice.value === 'later';
     document.querySelector('[data-checkout-extension-field]').hidden = !registration;
-    domainField.required = domainChoice.value !== 'later';
+    if (domainField) domainField.required = domainChoice.value !== 'later';
     document.querySelector('[data-summary-package]').textContent = domainOnly ? 'Domain registration' : plan.name;
-    document.querySelector('[data-summary-storage]').textContent = domainOnly ? '.' + domainExample.extension + ' domain example' : `${plan.storage} GB NVMe SSD · ${plan.websites} websites`;
+    document.querySelector('[data-summary-storage]').textContent = domainOnly ? (domainName || 'Domain name not selected') : plan.storage + ' GB NVMe SSD · ' + plan.websites + ' websites';
     document.querySelector('[data-summary-cycle]').textContent = yearly ? 'Yearly billing · full annual payment' : 'Monthly billing';
     document.querySelector('[data-summary-hosting]').textContent = domainOnly ? 'Not added' : formatMoney(hostingPrice) + (yearly ? ' / year' : ' / month');
-    document.querySelector('[data-summary-domain]').textContent = registration ? formatMoney(domainPrice) + ' / year' : domainChoice.value === 'existing' ? 'Use existing domain' : 'Not added';
-    document.querySelector('[data-summary-total]').textContent = formatMoney(hostingPrice + domainPrice);
-    document.querySelector('[data-summary-renewal]').textContent = domainOnly ? 'Sample annual registration. Renewal pricing is not verified.' : `Hosting renews ${yearly ? 'yearly' : 'monthly'}. ${registration ? 'Domain registration is annual; renewal pricing is not verified.' : 'Domain registration is separate.'}`;
-    review.hidden = true; error.hidden = true; domainField.removeAttribute('aria-invalid');
+    document.querySelector('[data-summary-domain]').textContent = registration ? (knownDomainPrice ? formatMoney(domainPrice) + ' / year' : 'Price confirmed by Mumatec') : domainChoice.value === 'existing' ? 'Use existing domain' : 'Not added';
+    document.querySelector('[data-summary-total]').textContent = domainOnly && !knownDomainPrice ? 'Confirm after name' : formatMoney(hostingPrice + domainPrice);
+    document.querySelector('.summary-total span').textContent = registration && !knownDomainPrice ? (domainOnly ? 'Domain price on request' : 'Hosting price only') : 'Estimated first term';
+    document.querySelector('[data-summary-renewal]').textContent = domainOnly ? 'Domain is billed yearly. Mumatec confirms the renewal price.' : 'Hosting renews ' + (yearly ? 'yearly' : 'monthly') + '. ' + (registration ? (knownDomainPrice ? 'Domain registration is annual; renewal pricing is confirmed before setup.' : 'Domain price is confirmed before setup.') : 'Domain registration is separate.');
+    review.hidden = true; error.hidden = true; domainField?.removeAttribute('aria-invalid');
   }
   checkoutForm.addEventListener('input', refreshSummary);
   checkoutForm.addEventListener('change', refreshSummary);
   checkoutForm.addEventListener('submit', event => {
     event.preventDefault();
-    const value = domainField.value.trim().toLowerCase();
+    const value = domainField?.value.trim().toLowerCase() || '';
     const valid = value.length > 0 && value.length <= 253 && value.split('.').every(label => /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label));
     if (domainChoice.value !== 'later' && !valid) {
-      error.hidden = false; error.textContent = 'Enter a valid domain name for the preview.';
+      error.hidden = false; error.textContent = 'Enter a valid domain name.';
       domainField.setAttribute('aria-invalid', 'true'); domainField.focus(); return;
     }
+    const plan = catalogue.hosting.find(item => item.id === planField.value) || catalogue.hosting[0];
+    const yearly = cycleField.value === 'yearly';
+    const domainOnly = planField.value === 'domain-only';
+    const selections = [
+      domainOnly ? 'Domain registration' : 'Hosting: ' + plan.name + ' · ' + plan.storage + ' GB',
+      domainOnly ? 'Billing: yearly' : 'Billing: ' + (yearly ? 'yearly' : 'monthly'),
+      'Domain: ' + (domainChoice.value === 'register' ? value : domainChoice.value === 'existing' ? 'I already have a domain' : 'I will choose later'),
+      'Estimated first-term price: ' + document.querySelector('[data-summary-total]').textContent
+    ].join('\n');
+    const subject = domainOnly ? 'Domain request: ' + value : 'Hosting setup: ' + plan.name;
+    const body = 'Hello Mumatec,\n\nI’d like to ask about this setup:\n' + selections + '\n\nPlease confirm availability, the current total and renewal terms before setup.\n\nThank you.';
+    document.querySelector('[data-request-link]').href = 'mailto:' + (catalogue.email || 'info@mumatechosting.co.za') + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
     review.hidden = false; review.focus();
   });
   refreshSummary();
 }
 
-const enquiryForm = document.querySelector('[data-demo-enquiry]');
+const enquiryForm = document.querySelector('[data-enquiry]');
 if (enquiryForm) {
-  enquiryForm.querySelector('[type="submit"]').disabled = false;
+  const submit = enquiryForm.querySelector('[type="submit"]');
+  submit.disabled = false;
   const service = parameters.get('service');
   if (Array.from(enquiryForm.elements.service.options).some(option => option.value === service)) enquiryForm.elements.service.value = service;
   const feedback = enquiryForm.querySelector('.form-feedback');
-  enquiryForm.addEventListener('submit', event => { event.preventDefault(); feedback.hidden = false; feedback.focus(); });
-  enquiryForm.addEventListener('input', () => { feedback.hidden = true; });
-  enquiryForm.addEventListener('reset', () => { feedback.hidden = true; });
-}
-
-const accountTitle = document.querySelector('[data-account-title]');
-if (accountTitle) {
-  const views = {
-    login: ['Welcome back.', 'Sign-in is disabled while we review the main website design.', 'Sign-in disabled in preview'],
-    register: ['Start your next chapter.', 'Account creation will be connected after design approval.', 'Registration disabled in preview'],
-    reset: ['Let’s get you back in.', 'Password resets will use the real account system after approval.', 'Reset disabled in preview'],
-    support: ['Your support, together.', 'Existing tickets will be available after the client area is connected.', 'Account access disabled in preview']
-  };
-  const requested = parameters.get('view');
-  const view = Object.hasOwn(views, requested) ? requested : 'login';
-  accountTitle.textContent = views[view][0];
-  document.querySelector('[data-account-description]').textContent = views[view][1];
-  document.querySelector('[data-account-button]').textContent = views[view][2];
-  document.querySelector('[data-account-password]').hidden = view === 'reset' || view === 'support';
-  document.querySelectorAll('[data-account-tab]').forEach(link => {
-    if (link.dataset.accountTab === view) link.setAttribute('aria-current', 'page');
+  const emailLink = enquiryForm.querySelector('[data-enquiry-link]');
+  const resetPreparedMessage = () => { feedback.hidden = true; emailLink.hidden = true; };
+  enquiryForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const serviceName = enquiryForm.elements.service.selectedOptions[0].textContent;
+    const subject = serviceName + ' enquiry from ' + enquiryForm.elements.name.value.trim();
+    const body = [
+      'Name: ' + enquiryForm.elements.name.value.trim(),
+      'Reply to: ' + enquiryForm.elements.email.value.trim(),
+      'Service: ' + serviceName,
+      '',
+      enquiryForm.elements.message.value.trim()
+    ].join('\n');
+    emailLink.href = 'mailto:' + (catalogue.email || 'info@mumatechosting.co.za') + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    emailLink.hidden = false;
+    feedback.textContent = 'Your email is ready. Open it to review the details, then choose Send.';
+    feedback.hidden = false;
+    feedback.focus();
   });
+  enquiryForm.addEventListener('input', resetPreparedMessage);
+  enquiryForm.addEventListener('change', resetPreparedMessage);
+  enquiryForm.addEventListener('reset', resetPreparedMessage);
 }
