@@ -28,7 +28,7 @@ body.mumatec-client { margin: 0; background: var(--bg); color: var(--tx); font: 
 .mumatec-client .master-breadcrumb { background: transparent; border: 0; margin: 0; padding: 18px 0 0; }
 .mumatec-client .breadcrumb { background: transparent; font-size: .875rem; padding: 0; }
 .mumatec-client .breadcrumb .active { color: var(--tx2); }
-.mumatec-client #main-body { padding: 24px 0 48px; min-height: 60vh; }
+.mumatec-client #main-body { padding: 24px 24px 48px; min-height: 60vh; }
 .mumatec-client .primary-content { min-width: 0; }
 .mumatec-client .sidebar { font-size: .9375rem; }
 .mumatec-client .card,.mumatec-client .panel,.mumatec-client .well { border: 1px solid var(--line); border-radius: var(--radius); background: var(--card-bg); box-shadow: var(--shadow); color: var(--tx); }
@@ -122,7 +122,7 @@ body.mumatec-client { margin: 0; background: var(--bg); color: var(--tx); font: 
  .mumatec-client .container { padding-inline: 16px; }
  .mumatec-client .header .navbar { padding-block: 12px; } .mumatec-brand { width: 150px; }
  .mumatec-client .header .topbar .btn { max-width: 180px; overflow-wrap: anywhere; padding-inline: 8px; }
- .mumatec-client #main-body { padding-top: 18px; }
+ .mumatec-client #main-body { padding: 18px 16px 40px; }
  .mumatec-client h1 { font-size: 1.5rem; }
  .mumatec-client .tiles .tile { padding: 16px; min-height: 128px; }
  .mumatec-client .card-body { padding: 16px; }
