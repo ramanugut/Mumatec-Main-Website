@@ -7,14 +7,17 @@
   "redirects": [
     { "source": "/contacts", "destination": "/contact", "permanent": true },
     { "source": "/web-design", "destination": "/websites", "permanent": true },
-    { "source": "/client-area", "destination": "https://mumatechosting.co.za/billing/clientarea.php", "permanent": false },
-    { "source": "/privacy", "destination": "https://mumatechosting.co.za/refund_returns/", "permanent": false },
-    { "source": "/terms", "destination": "https://mumatechosting.co.za/refund_returns/", "permanent": false },
-    { "source": "/acceptable-use", "destination": "https://mumatechosting.co.za/refund_returns/", "permanent": false }
+    { "source": "/client-area", "destination": "/account", "permanent": false },
+    { "source": "/free-website-form", "destination": "/websites", "permanent": true },
+    { "source": "/privacy", "destination": "/policies", "permanent": false },
+    { "source": "/terms", "destination": "/policies", "permanent": false },
+    { "source": "/acceptable-use", "destination": "/policies", "permanent": false },
+    { "source": "/refund_returns", "destination": "/policies", "permanent": false }
   ],
   "headers": [
     { "source": "/(.*)", "headers": [
       { "key": "X-Content-Type-Options", "value": "nosniff" },
+      { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
       { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
     ]},
     { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }] }

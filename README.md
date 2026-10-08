@@ -1,33 +1,31 @@
-# Mumatec main website
+# Mumatec main website — review demo
 
-A WordPress-free, dependency-free public website with the unchanged Mumatec logo and Manager design kit. Twelve generated pages cover hosting, domains, email, website design, SSL, support, contact, about, pricing and FAQ routes. Two original generated images are optimized as responsive WebP assets.
+A self-contained, WordPress-free redesign for review before connecting real data. Client-area work is paused. Thirteen canonical pages, three compatibility aliases and a 404 cover the public site, sample domain search, order review and account entry. Two original illustrations are served as responsive WebP images.
 
-## Develop and preview
+## Review
+`/design-preview` offers all main-site screens at 320, 390, 768 and 1200 px, plus 200% text. The normal homepage is `/`. Compare packages, switch monthly / full annual billing, select a package and review a local order. Search for sample domain results; real availability is not claimed. Enquiry forms show local feedback without sending or saving anything. Account credentials and payments remain disabled. Call / email links open the user's device applications.
 
-Edit `site.json` for contact and WHMCS catalogue links, `scripts/build.py` for content, and `public/assets/site.css` for the layout. Run `python scripts/build.py`. Preview with `python -m http.server 8000 --directory public`. Generated pages are committed, so deployment needs no package installation or build step. Vercel serves `public/` with clean URLs. Apache can serve the same folder; `.htaccess` preserves native billing paths and resolves clean HTML routes.
+No free-website promotion, fabricated reviews, customer counts, uptime guarantee or infrastructure photograph is included. All pages are noindex. There are no active billing links, API requests, payment actions, analytics or form-storage endpoints. Inactive former billing configuration is retained for future planning only. Form submit buttons stay disabled if local JavaScript fails to load.
 
-The website contains working mobile navigation, domain input validation and search clearing, keyboard-accessible FAQs, direct contact actions, and native WHMCS ordering/account/support links. Domain availability and prices come from WHMCS, not simulated website results. SEO titles, descriptions, canonical URLs, social metadata, sitemap, 404 and security headers are included.
+## Develop
+Edit `site.json` for demo offers / contact details, `scripts/build.py` for content and `public/assets/site.css` for layout. `brand.css` is the unchanged Manager token snapshot. Run:
 
-## Current integration
+```sh
+python scripts/build.py
+python scripts/check_site.py
+node --check public/assets/site.js
+npm install --prefix /tmp/mumatec-demo-qa jsdom@22.1.0 --ignore-scripts --no-audit --no-fund
+NODE_PATH=/tmp/mumatec-demo-qa/node_modules node scripts/test_demo.cjs
+```
 
-WHMCS is published at https://mumatechosting.co.za/billing/. The website hands off to WHMCS for ordering, domain registration/transfer, accounts, invoices and tickets. Domain input uses `cart.php?a=add&domain=register&query=...`. Login and payment never run in website JavaScript.
+The test dependency is outside the website. The deployed site has no package or server requirement; generated pages are committed. Vercel serves `public/` with clean URLs. Apache supports the same folder and provided redirects. This is a review demo; do not upload it over live billing.
 
-Product endpoints and contact details were verified against the public Mumatec site on 8 October 2026. Automated access to the live package catalogue is blocked by cPGuard, so this site displays no guessed prices, limits, uptime or response-time promises. Individual plan comparison needs the current product export or an accessible WHMCS feed.
-
-## Install
-
-Upload the contents of `public/` to the website document root on staging, preserving the existing `/billing/` directory. Install the rebuilt client theme from `ramanugut/Mumatec-Client-Area` in the existing WHMCS installation. Native client links replace the WordPress bridge.
-
-If moving the root domain to Vercel, first move WHMCS to an independently reachable billing hostname and update `site.json`, or configure a verified reverse proxy. Merely changing DNS to Vercel will not move PHP/WHMCS. Do not switch the root domain while links still depend on its former server.
-
-The existing legal documents remain linked at `/refund_returns/`; `/terms`, `/privacy` and `/acceptable-use` redirect to that published policy page. Export that exact content into the static site before retiring WordPress. Also migrate existing articles/free-website applications and map historical `/whmcs-bridge/` query routes. These are cutover requirements, not new marketing promises.
-
-Back up the current files/database, validate native checkout/domain lookup/contact links and existing routes, then release after review. Restore the former document root/theme to roll back. See `LAUNCH_CHECKLIST.md` for outstanding live checks.
+Batch substantial changes before pushing. The existing Git integration triggers Vercel on pushes; do not deploy every edit or redeploy unchanged code. Update review results in the PR without another code push.
 
 ## Provenance
+The existing Mumatec homepage, retrieved on 8 October 2026, publishes monthly R59 / R79 / R120 and annual R638 / R854 / R1 296, for 15 / 30 / 60 GB and 2 / 3 / 5 websites. Paid website offers are R2 599 and R3 699. The user approved those prices as the demo baseline. Preserve the actual annual amounts and calculate savings from them; do not repeat the old rounded 10% claim. Start-Up 15 / 30 / 60 are clarified review labels, not verified WHMCS product IDs. Domain prices are examples from the indexed catalogue; it disagrees with the old homepage on some prices, so approval and live verification are required.
 
-Original PNG and Manager colours: `ramanugut/MumatecManager` tree `d9f538fa6e2f53a2c05e53e9c0157db8c310566e`. The logo is unchanged; CSS crops its existing transparent canvas using Manager's crop. Shared `brand.css` matches the client theme byte for byte. Images are original generated artwork: a conceptual hosting sculpture and an illustrative business workspace, not photographs of Mumatec infrastructure or customers. Manager itself is untouched.
+Manager colours and original PNG come from `ramanugut/MumatecManager`, tree `d9f538fa6e2f53a2c05e53e9c0157db8c310566e`. The user requested a text wordmark in Montserrat; its two-line navy / cyan identity is preserved. The local 12 KB Google Fonts subset includes the SIL Open Font License. The original PNG remains for reference and the favicon. The server sculpture and workspace are original generated illustrations, not Mumatec facilities or customer projects. Manager and the client repository are unchanged by this update.
 
-## Design review
-
-`/design-preview/` embeds the actual static website and clearly labelled client visual fixtures at 320/390/768/1200px. Client fixtures are generated from the client-area repository; update them from that repo when changing its theme. This preview does not run Smarty, WHMCS authentication or payments.
+## After approval
+Confirm actual products, prices, tax treatment, domain renewals, dedicated email / SSL offers, legal policies and business details. Then connect the approved service / account / enquiry / checkout workflows in staging. Resolve the PHP billing hostname before a root-domain move. See `LAUNCH_CHECKLIST.md` and `UX-CONTRACT.md`.

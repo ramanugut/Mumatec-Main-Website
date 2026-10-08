@@ -22,9 +22,9 @@ omitted:
 # Mumatec Hosting
 
 ## Overview
-Use the original Mumatec logo, deep blue and cyan identity, 14px rounded cards and small glossy highlights from ramanugut/MumatecManager. The public website serves South African business owners; the client area is a working surface for customers managing hosting, domains, invoices and tickets. English; en-ZA; no invented pricing, service limits, testimonials or uptime claims.
+Preserve the Mumatec navy / cyan identity, 14px cards and glossy highlights from ramanugut/MumatecManager. The user requested a text recreation of the two-line wordmark in locally served Montserrat. The public website serves South African business owners. This iteration is an isolated main-site demo; client-area work is paused. Published existing offers provide the demo baseline. No invented testimonials or operational guarantees.
 
-The website signature is a dark-blue domain-search panel next to a concise business headline. The client area uses familiar WHMCS controls with the same surfaces, actions and colours. Avoid purple accents, decorative dashboards, phone-width desktop layouts and oversized headings inside the account workspace.
+The main-site signature is a navy / blue business headline, original server sculpture, full-width search dock and three clear package cards. On phones the business decision and search come before the illustration. Paid website design uses an illustrative workspace. Avoid purple accents, fake dashboards and excessive badges.
 
 ## Colors
 Runtime ownership (Model B): public/assets/brand.css in the main website and templates/mumatec/css/brand.css in the client area are identical copies of the portable brand-kit snapshot. These adapt MumatecManager's accepted tokens without importing its admin code. Keep them byte-identical when changing the shared kit. Primary #105479 maps to --ac; background #f0f6f9 to --bg; surface #ffffff to --card-bg; text #12364a to --tx; secondary #4e6777 to --tx2; muted #5e7381 to --tx3; cyan #38a8c8 to --cyan. White --on-ac is the foreground for blue filled controls. Error/success/warning roles use separate semantic variables.
@@ -36,7 +36,7 @@ Body uses the existing system stack, 16px, with 1.55 line height in the client a
 Public pages have a 1280px maximum and become one column below 640px; navigation collapses below 900px. Client area uses the Twenty-One Bootstrap layout, expanded to 1440px and 1600px on large displays. The desktop sidebar stays beside content; phones use the parent menu and natural document scrolling. Actions and search controls precede lists in DOM order. Only table containers scroll horizontally. Forms remain natural-height.
 
 ## Elevation & Depth
-Keep small inset highlights and low-opacity shadows. Use deep blue on navigation and the domain-search panel; white cards sit on a light blue canvas. No decorative illustrations, glass blur, or animation loops. Preserve white space around the logo without redrawing its artwork.
+Keep small inset highlights and low-opacity shadows. Use deep blue on navigation and the domain-search panel; white cards sit on a light blue canvas. Original illustrations are allowed in marketing, with no claim to depict Mumatec facilities or clients. Avoid glass blur and animation loops. The Montserrat text wordmark follows the original proportions and colours; retain the original PNG as reference.
 
 ## Shapes
 14px cards (--radius), 10px controls (--control-radius), 999px status pills. The public domain panel is a named marketing exception at 24px, reducing to 18px on phones.
@@ -46,7 +46,10 @@ Main website header/footer, domain search, card and FAQ markup are shared by scr
 
 WHMCS owns forms, server validation, authentication, authorisation, billing actions, table navigation, dialogs and feedback. templates/mumatec/css/custom.css adapts all parent surfaces. Header, footer and dashboard overrides retain upstream includes, dynamic menus and hook output. The dashboard quick links are navigation only. The public site never stores client information or credentials.
 
-Buttons have hover, focus and pressed states; disabled buttons are visibly inactive. Error copy sits next to the domain field with a live region. All forms link to real service endpoints. Native WHMCS selects and date fields retain their platform popup behavior. Reduced motion and forced colours are supported by brand.css.
+Buttons have hover, focus and pressed states; disabled buttons are visibly inactive. Error copy sits next to the domain field with a live region. Demo forms and account actions are isolated locally. Orders, payments and credentials remain disabled. Native WHMCS selects and date fields retain their platform popup behavior. Reduced motion and forced colours are supported by brand.css.
 
 ## Do's and Don'ts
-Keep the exact original logo in both repos. Keep bills, payments, customer permissions and lifecycle decisions inside WHMCS. Keep package prices in the existing catalogue until a verified public feed or product export is supplied. Do not replace a real workflow with a simulated success, expose the Manager admin bridge, or copy staff authentication into the customer site.
+Main website: use the approved Montserrat text recreation; client repository remains unchanged and paused. Keep all real billing, permissions and account lifecycle actions disconnected during review. Show existing published prices as clearly labelled demo values. Never claim sample domain results are real availability, an enquiry was sent, or a payment succeeded. Do not expose the Manager admin bridge or staff authentication.
+
+## Main-site attention colours
+The user approved relevant supporting colours. The isolated marketing site uses warm coral #b54b2b for principal actions and the selected billing cycle, #94381e for hover, #fff3eb for the middle package surface and #fbf6f0 for the business / email storytelling surface. Navy / cyan remain the wordmark and identity. White action text exceeds 4.5:1 contrast. Colour is paired with labels, borders and input state; it is not the sole indication of selection. These are main-site extensions, not changes to the paused client kit.
