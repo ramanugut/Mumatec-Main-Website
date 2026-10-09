@@ -1,54 +1,72 @@
-# Mumatec Hosting — owner-supplied trail design
+---
+version: alpha
+colors:
+  primary: "#105479"
+  background: "#f0f6f9"
+  surface: "#ffffff"
+  text: "#12364a"
+  secondaryText: "#4e6777"
+  mutedText: "#5e7381"
+typography:
+  body:
+    fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
+    fontSize: "16px"
+    lineHeight: "1.55"
+rounded:
+  card: "14px"
+omitted:
+  - section: spacing
+    reason: "Runtime CSS and Tailwind remain the canonical spacing owners."
+---
 
-The visual source is Marven’s `Mumatec Hosting Trail.html`. Use its deep blue atmosphere, cyan light, warm orange actions, physical server layers, rounded glass cards and connected scroll trail. The website remains multi-page: the trail is the homepage, while each service has a dedicated page and its own customer decision.
+# Mumatec Hosting
 
-## Shared design system
+## Overview
+Preserve the Mumatec navy / cyan identity, 14px cards and glossy highlights from ramanugut/MumatecManager. The user requested a text recreation of the two-line wordmark in locally served Montserrat. The public website serves South African business owners. The main site is reviewed as a standalone website; the client-area rebuild is separate. Use published offers and avoid invented testimonials or operational guarantees.
 
-| Role | Value |
-| --- | --- |
-| Deep background | #061f33 |
-| Blue background | #0a3a5e |
-| Logo blue | #0e4f7c |
-| Cyan accent | #27a5cd |
-| Light cyan | #5cc9ea |
-| Primary action | #d4511f |
-| Action highlight | #ff8a50 |
-| Light page | #f6fafc |
-| Pale blue section | #e3f2f9 |
-| Main text | #08263d |
-| Supporting text | #496479 |
+The main-site signature is a glossy navy launch scene: a perspective website panel, domain and email layers, warm business photography, a full-width domain search dock and three clear package cards. The artwork is illustrative, not a live account interface. On phones the business decision comes before the image and domain search. Paid website design uses an illustrative workspace. Avoid purple accents, fake dashboards and excessive badges.
 
-Headings use Bricolage Grotesque at 88% width; body text uses Figtree. Both are local WOFF2 files, with their OFL licenses included. The display font retains variable weight but fixes optical size and width to reduce the file from 131,548 to 40,928 bytes. The Montserrat wordmark remains separate and consistent on every page.
+## Colors
+Runtime ownership (Model B): public/assets/brand.css in the main website and templates/mumatec/css/brand.css in the client area are identical copies of the portable brand-kit snapshot. These adapt MumatecManager's accepted tokens without importing its admin code. Keep them byte-identical when changing the shared kit. Primary #105479 maps to --ac; background #f0f6f9 to --bg; surface #ffffff to --card-bg; text #12364a to --tx; secondary #4e6777 to --tx2; muted #5e7381 to --tx3; cyan #38a8c8 to --cyan. White --on-ac is the foreground for blue filled controls. Error/success/warning roles use separate semantic variables.
 
-## Page structure
+## Typography
+Body uses the existing system stack, 16px, with 1.55 line height in the client area and 1.65 for marketing reading. Arial is a display-only companion. Main website headline scale is reserved for marketing; account headings stay between 24px and 30px. Metadata may use 13px; regular controls and labels are at least 14px. Wrap names and long values.
 
-- The homepage follows the supplied seven-part composition: business launch, hosting plans, included tools, domain/website/email explanation, Pretoria contact, questions and final action.
-- Navigation opens dedicated hosting, domains, email, websites, SSL, support and about pages. Contact, guided setup, quick setup, domain results, service details and the account status page remain separate.
-- Service heroes share the homepage’s dotted blue background, cyan heading accent, orange actions and 3D depth. Illustrations show the service being discussed.
-- Hosting uses the supplied physical slab treatment both in the hero and in package cards.
-- The full guided setup remains the destination of “Help me choose” and the homepage guide callout. It explains services visually and preserves owner-confirmed service rules.
-- Small screens keep native document scrolling. The homepage’s connected scene becomes a normal block; the guide explanation becomes compact so the first choice remains visible. Continue controls follow the choices and do not cover them.
+## Layout
+Public pages have a 1280px maximum and become one column below 640px; navigation collapses below 900px. Client area uses the Twenty-One Bootstrap layout, expanded to 1440px and 1600px on large displays. The desktop sidebar stays beside content; phones use the parent menu and natural document scrolling. Actions and search controls precede lists in DOM order. Only table containers scroll horizontally. Forms remain natural-height.
 
-## Motion and performance
+## Elevation & Depth
+Keep small inset highlights and low-opacity shadows. Use deep blue on navigation and the domain-search panel; white cards sit on a light blue canvas. Original illustrations are allowed in marketing, with no claim to depict Mumatec facilities or clients. Gloss uses static gradients, thin light-catching borders and inset highlights. CSS perspective adds depth; pointer tilt runs only on fine pointers and respects reduced motion. Section reveals run once with IntersectionObserver, never hiding essential actions or content without a safe fallback. No WebGL, video, external animation runtime, scroll hijacking or continuous JavaScript animation loop. Small CSS entrance effects use only opacity and transforms. Header blur is limited to its small surface. The Montserrat text wordmark follows the original proportions and colours; retain the original PNG as reference.
 
-`trail.js` updates the trail and progress on scroll through a queued animation frame; it does not intercept scrolling. The globe is drawn only while its hero is visible, with a 30 fps cap and fewer points on phones. Section animations pause when offscreen. Hidden documents stop the draw scheduler. Reduced motion disables animation and keeps the full content visible, including after the preference changes while the page is open.
+## Shapes
+14px cards (--radius), 10px controls (--control-radius), 999px status pills. The public domain panel is a named marketing exception at 24px, reducing to 18px on phones.
 
-The homepage has no large raster hero image, animation library, WebGL engine or framework. Homepage HTML, CSS, JavaScript and fonts total approximately 206 KB before compression, excluding the favicon. This is a bundle measurement, not a loading-time claim. Other pages reuse the existing responsive images, shared styles and native controls.
+## Components
+Main website header/footer, domain search, card and FAQ markup are shared by scripts/build.py. site.json owns contact and public catalogue links. site.js owns menu state and domain-input validation; site.css consumes the shared tokens.
 
-## Source ownership
+WHMCS owns forms, server validation, authentication, authorisation, billing actions, table navigation, dialogs and feedback. templates/mumatec/css/custom.css adapts all parent surfaces. Header, footer and dashboard overrides retain upstream includes, dynamic menus and hook output. The dashboard quick links are navigation only. The public site never stores client information or credentials.
 
-| Concern | Source |
-| --- | --- |
-| Catalogue, contact and fee | site.json |
-| Homepage composition | templates/trail-home.html and scripts/trail_page.py |
-| Shared typography, colours, header, footer and page styling | public/assets/trail-theme.css and trail-fonts.css |
-| Homepage composition styling | public/assets/trail.css |
-| Trail, visibility, pointer and progress behaviour | public/assets/trail.js |
-| Decorative globe and server skyline | public/assets/trail-canvas.js |
-| Dedicated service content and illustrations | scripts/service_pages.py |
-| Guide branching and service validation | scripts/setup_page.py and public/assets/setup.js |
-| Billing, domain input and enquiry preparation | public/assets/site.js |
+Buttons have hover, focus and pressed states; disabled buttons are visibly inactive. Error copy sits next to the domain field with a live region. Demo forms and account actions are isolated locally. Orders, payments and credentials remain disabled. Native WHMCS selects and date fields retain their platform popup behavior. Reduced motion and forced colours are supported by brand.css.
 
-Build with `python scripts/build.py`. Public outputs must stay reproducible; edit the generator/template together with styling, rather than editing generated HTML alone.
+## Do's and Don'ts
+Main website: use the approved Montserrat text recreation; client repository remains separate. Keep billing, permissions and account lifecycle actions disconnected during review. Show current published prices with clear billing terms. Never claim a domain is available, an enquiry was sent, or a payment succeeded. Do not expose the Manager admin bridge or staff authentication.
 
-The client-area rebuild remains paused. Domain availability, order creation, payments and WHMCS are disconnected. Prices are guides confirmed before setup. Do not add fake status, testimonials, availability results, scarcity or uptime claims.
+## Main-site attention colours
+The user approved relevant supporting colours. The isolated marketing site uses warm coral #b54b2b for principal actions and the selected billing cycle, #94381e for hover, #fff3eb for the middle package surface and #fbf6f0 for the business / email storytelling surface. Navy / cyan remain the wordmark and identity. White action text exceeds 4.5:1 contrast. Colour is paired with labels, borders and input state; it is not the sole indication of selection. These are main-site extensions, not changes to the paused client kit.
+
+## Main-site motion and performance
+CSS/JS are local and cache-versioned. Hero image is eager and responsive; all subsequent images are lazy and dimensioned. Teal / mint feature panels and warm coral actions help distinguish benefits from decisions. Motion stops for reduced motion, touch pointers and hidden tabs; content remains usable with JavaScript disabled. Hover tilt never applies to forms. CONTENT-SOURCES.md records offer provenance and unresolved launch claims.
+
+## Connected edition — 9 October 2026
+The customer journey replaces repeated service cards with a domain → website → business email story. CSS perspective gives a layered website scene real depth. A desktop sticky illustration changes angle once each story enters the reading region, using IntersectionObserver and transform transitions only. Phones use a natural one-column document with a smaller non-sticky scene. Reduced motion shows the same content without transitions. Gloss is static gradients and inset borders; mint and copper distinguish complementary services. Existing coral remains the action colour. No forced scroll, autoplay video, WebGL, external animation libraries or perpetual render loop. Prices and service boundaries stay sourced in CONTENT-SOURCES.md.
+
+## Service pages and guided setup — 9 October 2026
+Each service has a distinct CSS perspective scene: hosting rack, domain address, email sheet, website preview and encrypted connection. Support/contact/about use the same gloss and typography. Essential heading text remains white on dark surfaces. Service cards reveal once with the shared observer. No extra raster asset or animation dependency was added.
+
+The guided setup is a local native form with radio cards, native selects, inline errors, visible progress, back/change actions and visual explanations. It branches by the customer's goal, recommends the lowest listed hosting package meeting site count and storage, and keeps quote-only services outside known totals. Monthly, annual and once-off amounts stay separate. Existing domains are not registered again. Certificate coverage is checked before adding SSL costs. Choices persist in this tab and can be reset; no personal contact details are stored. The guide's CSS/JS load only on its route.
+
+## Direction in setup forms — 9 October 2026
+Coral identifies where to act, mint confirms an actual service choice, and numbered fieldsets show the required order. Quick setup starts without an implied hosting purchase when no valid package was handed over. Billing/domain/review sections appear after choosing a service; hosting billing is hidden for domain-only. Each wizard question has a short action instruction and a sticky Continue area with reduced-motion support. Text, numbers and control state carry the same meaning as colour.
+
+## Rich brand blue and visible guidance — 9 October 2026
+Use logo blue #105479, deeper #083950 and saturated teal-blue #087994 across guide entry points, selected cards, primary guide actions and decision panels. Cyan #38a8c8 provides edge highlights. White text on saturated blue carries selected state; visible Selected text and native radio checks avoid relying on colour alone. The guide promotion explains its purpose and has a large white action on a blue panel. Shared desktop header links directly to Help me choose; mobile exposes it in navigation. Remove personal phone links and use business email.

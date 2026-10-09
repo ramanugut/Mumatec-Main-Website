@@ -30,11 +30,7 @@ for path,page in pages.items():
     for ref in page.refs:
         parsed=urlsplit(ref)
         if parsed.scheme in ('tel','mailto'): continue
-        if parsed.scheme or parsed.netloc:
-            # Owner-approved portfolio projects are normal outbound links.
-            portfolio={'splendidconsulting.co.za','www.justinselearning.co.za','www.karuwaafrica.co.za','www.moraluxe.co.za'}
-            if parsed.scheme!='https' or parsed.netloc not in portfolio: errors.append(f'{path.name}: active external route {ref}')
-            continue
+        if parsed.scheme or parsed.netloc: errors.append(f'{path.name}: active external route {ref}'); continue
         target=(PUBLIC/unquote(parsed.path.lstrip('/')) if parsed.path.startswith('/') else path.parent/unquote(parsed.path)).resolve() if parsed.path else path
         if target.is_dir(): target/='index.html'
         if not target.exists() and not target.suffix: target=target.with_suffix('.html')
@@ -48,4 +44,3 @@ if any(urlsplit(item['destination']).scheme for item in config['redirects']): er
 if (PUBLIC/'design-preview').exists(): errors.append('Public review shell must not be published')
 if errors: raise SystemExit('\n'.join(errors))
 print(f'{len(pages)} HTML documents passed: local routes / assets / anchors, unique IDs, headings, noindex and isolation.')
-

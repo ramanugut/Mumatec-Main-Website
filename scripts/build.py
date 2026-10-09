@@ -38,20 +38,20 @@ def icon(name):
 def brand():
     return '<a href="index.html" class="brand" aria-label="Mumatec Hosting home"><span class="brand-name" aria-hidden="true">MUMATEC</span><span class="brand-hosting" aria-hidden="true">HOSTING</span></a>'
 def header(current):
-    nav = [('hosting.html','Hosting'),('domains.html','Domains'),('email.html','Email'),('websites.html','Websites'),('ssl.html','SSL'),('support.html','Help'),('about.html','About')]
+    nav = [('hosting.html','Hosting'),('domains.html','Domains'),('email.html','Email'),('websites.html','Websites'),('support.html','Help'),('about.html','About')]
     links = ''.join(f'<a href="{path}"'+(' aria-current="page"' if path==current else '')+f'>{label}</a>' for path,label in nav)
     return f'''<a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="wrap header-inner">{brand()}
 <nav id="site-nav" class="site-nav" aria-label="Main navigation">{links}<a class="mobile-guide" href="setup.html">Help me choose →</a><a class="mobile-contact" href="contact.html">Talk to us</a></nav>
 <a class="btn btn-primary header-client header-guide" href="setup.html">Help me choose →</a>
 <button class="btn menu-toggle" type="button" disabled aria-expanded="false" aria-controls="site-nav">Menu</button>
-</div><div class="reading-progress" aria-hidden="true"></div></header>'''
+</div></header>'''
 def footer():
     return f'''<footer class="site-footer"><div class="wrap">
 <div class="footer-grid"><div class="footer-brand">{brand()}<p>Websites, domains and business email.<br>{e(CONFIG['location'])}.</p></div>
 <div><h3>Get online</h3><ul><li><a href="hosting.html">Web hosting</a></li><li><a href="domains.html">Domain names</a></li><li><a href="email.html">Business email</a></li><li><a href="ssl.html">SSL certificates</a></li><li><a href="web-design.html">Web design</a></li></ul></div>
 <div><h3>Customer help</h3><ul><li><a href="{billing('clientarea.php')}">Customer account</a></li><li><a href="contact.html?service=support">Existing service help</a></li><li><a href="{billing('cart.php?a=add&domain=transfer')}">Transfer a domain</a></li><li><a href="support.html">Help &amp; FAQs</a></li></ul></div>
-<div><h3>Mumatec</h3><ul><li><a class="nav-guide" href="setup.html">Help me choose →</a></li><li><a href="about.html">About us</a></li><li><a href="contact.html">Contact us</a></li><li><a href="mailto:{e(CONFIG['email'])}">{e(CONFIG['email'])}</a></li></ul></div></div>
+<div><h3>Mumatec</h3><ul><li><a class="nav-guide" href="setup.html">Help me choose →</a><a href="about.html">About us</a></li><li><a href="contact.html">Contact us</a></li><li><a href="support.html">Help &amp; FAQs</a></li><li><a href="mailto:{e(CONFIG['email'])}">{e(CONFIG['email'])}</a></li></ul></div></div>
 <div class="footer-bottom"><p>© <span data-year>2026</span> Mumatec Hosting. All rights reserved.</p><p><a href="policies.html">Service information</a></p></div>
 </div></footer>'''
 def domain_form():
@@ -95,10 +95,6 @@ def plans():
 <p class="plan-price"><span class="currency">R</span><strong data-plan-price>{p['monthly']}</strong><span data-plan-period>/ month</span></p><p class="plan-charge" data-plan-charge>Billed monthly.</p>
 <dl class="plan-specs"><div><dt>NVMe SSD storage</dt><dd>{p['storage']} GB</dd></div><div><dt>Websites</dt><dd>{p['websites']}</dd></div><div><dt>MySQL databases</dt><dd>{e(p['databases'])}</dd></div><div><dt>Email accounts</dt><dd>Unlimited</dd></div></dl>
 <a class="btn{' btn-primary' if i==1 else ''}" data-plan-link href="checkout.html?plan={e(p['id'])}&amp;cycle=monthly">Choose {p['storage']} GB <span aria-hidden="true">↗</span></a><p class="plan-saving" data-plan-saving>Annual option: save R{saved} over 12 monthly payments.</p></article>''')
-    # A physical capacity illustration carries the owner's trail design to hosting pages.
-    for i in range(len(cards)):
-        slabs=''.join(f'<div class="service-slab" style="--i:{n}"><i class="t"></i><i class="f"></i><i class="r"></i><i class="l"></i></div>' for n in range((1,2,4)[i]))
-        cards[i]=cards[i].replace('<dl class="plan-specs">',f'<div class="plan-tower" aria-hidden="true"><div class="service-rack">{slabs}</div></div><dl class="plan-specs">')
     return f'''<section class="section plans-section" id="hosting-plans" aria-labelledby="plans-heading"><div class="wrap">
 <div class="section-heading"><div><p class="eyebrow">Hosting that fits your business</p><h2 id="plans-heading">Choose your space.<br>Keep your costs clear.</h2></div><fieldset class="billing-switch"><legend>Choose your billing</legend><div><label><input type="radio" name="billing-cycle" value="monthly" checked><span>Monthly</span></label><label><input type="radio" name="billing-cycle" value="yearly"><span>Yearly</span></label></div><p>Yearly prices show the full annual payment.</p></fieldset></div>
 <p class="sr-only" data-billing-feedback aria-live="polite"></p><div class="plan-grid">{''.join(cards)}</div>
@@ -167,9 +163,6 @@ _service_pages = make_pages(globals())
 for _name in ('hosting','domains','email','design_content','design','support','contact','about','ssl','account','policies'):
     globals()[_name] = _service_pages[_name]
 
-from trail_page import render_trail
-def home(): return render_trail(globals())
-
 PAGES = {
  'index.html': ('Web hosting, domains & business email', 'Get your business online with Mumatec Hosting in South Africa. Explore web hosting, domains, business email and web design.', home),
  'hosting.html': ('Web hosting', 'Explore monthly and yearly web hosting packages from Mumatec Hosting.', hosting),
@@ -193,25 +186,15 @@ PAGES['policies.html'] = ('Pricing & service details', 'Important pricing and se
 for path,(title,description,render) in PAGES.items():
     canonical_path = {'web-design.html':'websites.html', 'pricing.html':'hosting.html', 'faq.html':'support.html'}.get(path,path)
     canonical=CONFIG['origin'] + ('/' if canonical_path=='index.html' else '/'+canonical_path.removesuffix('.html'))
-    is_home=path=='index.html'
-    styles='<link rel="stylesheet" href="'+asset('assets/brand.css' if is_home else 'assets/site.css')+'">'
-    styles+='<link rel="stylesheet" href="'+asset('assets/trail-fonts.css')+'">'
-    if is_home: styles+='<link rel="stylesheet" href="'+asset('assets/trail.css')+'">'
-    if path=='setup.html': styles+='<link rel="stylesheet" href="'+asset('assets/setup.css')+'">'
-    styles+='<link rel="stylesheet" href="'+asset('assets/trail-theme.css')+'">'
-    scripts='<script src="'+asset('assets/site.js')+'" defer></script><script src="'+asset('assets/trail.js')+'" defer></script>'
-    if is_home: scripts+='<script src="'+asset('assets/trail-canvas.js')+'" defer></script>'
-    if path=='setup.html': scripts+='<script src="'+asset('assets/setup.js')+'" defer></script>'
     content=f'''<!doctype html>
 <html lang="en-ZA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(title)} | Mumatec Hosting</title><meta name="description" content="{e(description)}"><meta name="robots" content="noindex, nofollow">
 <link rel="canonical" href="{e(canonical)}"><meta name="theme-color" content="#105479"><meta property="og:type" content="website"><meta property="og:site_name" content="Mumatec Hosting"><meta property="og:title" content="{e(title)} | Mumatec Hosting"><meta property="og:description" content="{e(description)}"><meta property="og:url" content="{e(canonical)}"><meta property="og:image" content="{e(CONFIG['origin'])}/assets/hosting-studio-1536.webp"><meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/mumatec-logo.png" type="image/png">
-<link rel="preload" href="assets/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin>{styles}{scripts}<script type="application/json" id="service-catalogue">{json.dumps({'hosting':CONFIG['hostingPlans'],'domains':CONFIG['domainExamples'],'design':CONFIG['designPlans'],'email':CONFIG['email'],'externalHostSetupFee':CONFIG['externalHostSetupFee']}).replace('<', '&lt;')}</script>
-</head><body class="{'trail-page' if is_home else 'service-page'}">{header(path)}<main id="main" class="{'page' if is_home else 'service-main'}">{render()}</main>{footer()}</body></html>'''
+<link rel="preload" href="assets/fonts/montserrat-wordmark.woff" as="font" type="font/woff" crossorigin><link rel="stylesheet" href="{asset('assets/site.css')}"><script src="{asset('assets/site.js')}" defer></script>{('<link rel="stylesheet" href="'+asset('assets/setup.css')+'"><script src="'+asset('assets/setup.js')+'" defer></script>') if path=='setup.html' else ''}<script type="application/json" id="service-catalogue">{json.dumps({'hosting':CONFIG['hostingPlans'],'domains':CONFIG['domainExamples'],'design':CONFIG['designPlans'],'email':CONFIG['email'],'externalHostSetupFee':CONFIG['externalHostSetupFee']}).replace('<', '&lt;')}</script>
+</head><body>{header(path)}<main id="main">{render()}</main>{footer()}</body></html>'''
     (OUT/path).write_text(content,encoding='utf-8')
-(OUT/'404.html').write_text(f'''<!doctype html><html lang="en-ZA"><head><meta charset="utf-8"><base href="/"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Page not found | Mumatec Hosting</title><meta name="robots" content="noindex"><link rel="stylesheet" href="{asset('assets/site.css')}"><link rel="stylesheet" href="{asset('assets/trail-fonts.css')}"><link rel="stylesheet" href="{asset('assets/trail-theme.css')}"><link rel="icon" href="assets/mumatec-logo.png"><script src="{asset('assets/site.js')}" defer></script><script src="{asset('assets/trail.js')}" defer></script></head><body class="service-page">{header('404.html')}<main id="main"><section class="page-intro"><div class="wrap"><p class="eyebrow">404 · Page not found</p><h1>Let’s find your<br>next step.</h1><p class="lead">That page may have moved. Head back to Mumatec, or let us help you choose the services you need.</p><div class="actions">{btn('Back to home','/',True)}{btn('Guide my setup','setup.html')}</div></div></section><section class="section"><div class="wrap"><h2>Looking for something?</h2><div class="actions">{btn('Hosting','hosting.html')}{btn('Domain names','domains.html')}{btn('Website design','websites.html')}{btn('Contact us','contact.html')}</div></div></section></main>{footer()}</body></html>''',encoding='utf-8')
+(OUT/'404.html').write_text(f'''<!doctype html><html lang="en-ZA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Page not found | Mumatec Hosting</title><meta name="robots" content="noindex"><link rel="stylesheet" href="/{asset('assets/site.css')}"><link rel="icon" href="/assets/mumatec-logo.png"></head><body><main class="wrap section"><p class="eyebrow">404</p><h1>That page isn’t here.</h1><p>The address may have changed. Start from the homepage or contact us for help.</p>{btn('Back to home','/',True)} {btn('Contact us','/contact.html')}</main></body></html>''',encoding='utf-8')
 (OUT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join(f'<url><loc>{e(CONFIG["origin"]+("/" if path=="index.html" else "/"+path.removesuffix('.html')))}</loc></url>' for path in PAGES if path not in {"web-design.html", "pricing.html", "faq.html"})+'</urlset>\n')
 print(f'Built {len(PAGES)} pages + 404 and sitemap.')
 shutil.rmtree(OUT/'design-preview', ignore_errors=True)
-
