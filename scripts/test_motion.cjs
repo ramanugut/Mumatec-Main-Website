@@ -1,57 +1,38 @@
-// Verify progressive motion and the accessibility preference change path.
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const {JSDOM} = require('jsdom');
-const html = fs.readFileSync('public/index.html','utf8');
-const script = fs.readFileSync('public/assets/site.js','utf8');
-let assertions = 0;
-function verify(value) { assert.ok(value); assertions++; }
-for (const reduce of [true,false]) {
-  const dom = new JSDOM(html,{url:'https://preview.example/',runScripts:'outside-only',pretendToBeVisual:true});
-  const w = dom.window;
-  const changes = {};
-  const preferences = {matches:reduce,addEventListener:(type,fn)=>{changes.reduce=fn;}};
-  w.matchMedia = query => query.includes('reduced-motion') ? preferences : {matches:true,addEventListener:()=>{}};
-  const observed=[];
-  const observers=[];
-  let disconnected=false;
-  w.IntersectionObserver = class {
-    constructor(cb,options) { this.callback=cb; this.options=options; this.targets=[]; observers.push(this); }
-    observe(el) { observed.push(el); this.targets.push(el); }
-    unobserve(el) { el.dataset.observedOnce='true'; }
-    disconnect() { disconnected=true; }
-  };
-  w.document.querySelectorAll('.section-heading,.foundation-visual,.foundation-detail,.home-service-cards,.local-card,.portfolio-grid').forEach(el=>{
-    el.getBoundingClientRect=()=>({top:2000});
-  });
-  w.eval(script);
-  if (reduce) {
-    verify(w.document.querySelectorAll('.reveal-ready').length===0);
-    verify(observed.length===0);
-  } else {
-    verify(observed.length>0);
-    const reveals=observers.find(item=>item.options.threshold===.08);
-    const journey=observers.find(item=>item.options.threshold===0);
-    reveals.callback([{target:reveals.targets[0],isIntersecting:true}]);
-    verify(reveals.targets[0].classList.contains('is-visible'));
-    verify(reveals.targets[0].dataset.observedOnce==='true');
-    const email=w.document.querySelector('[data-stage="email"]');
-    journey.callback([{target:email,isIntersecting:true}]);
-    verify(w.document.querySelector('[data-journey]').dataset.activeStage==='email');
-    verify(email.classList.contains('is-current'));
-    preferences.matches=true; changes.reduce();
-    verify(disconnected);
-    verify(w.document.querySelectorAll('.reveal-ready').length===0);
-    verify(w.document.querySelector('[data-tilt]').style.getPropertyValue('--tilt-x')==='');
-    verify(!w.document.querySelector('[data-journey]').dataset.activeStage);
-  }
-  dom.window.close();
+// Service pages progressively reveal content and respect live preference changes.
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const {JSDOM}=require('jsdom');
+const html=fs.readFileSync('public/hosting.html','utf8');
+const script=fs.readFileSync('public/assets/site.js','utf8');
+let checks=0;const check=value=>{assert.ok(value);checks++};
+for(const reduce of [true,false]){
+ const dom=new JSDOM(html,{url:'https://preview.example/hosting',runScripts:'outside-only',pretendToBeVisual:true});
+ const w=dom.window,changes={},observers=[];
+ const preference={matches:reduce,addEventListener:(type,fn)=>changes.reduce=fn};
+ w.matchMedia=q=>q.includes('reduced-motion')?preference:{matches:true,addEventListener:()=>{}};
+ let disconnected=false;
+ w.IntersectionObserver=class{
+  constructor(cb,options){this.cb=cb;this.options=options;this.targets=[];observers.push(this);}
+  observe(el){this.targets.push(el);}
+  unobserve(el){el.dataset.revealed='true';}
+  disconnect(){disconnected=true;}
+ };
+ w.document.querySelectorAll('.section-heading,.cards .card,.steps').forEach(el=>el.getBoundingClientRect=()=>({top:2000}));
+ w.eval(script);
+ if(reduce){check(w.document.querySelectorAll('.reveal-ready').length===0);check(observers.length===0);}
+ else{
+  const observer=observers.find(o=>o.options.threshold===.08);check(observer.targets.length>0);
+  const target=observer.targets[0];observer.cb([{target,isIntersecting:true}]);
+  check(target.classList.contains('is-visible'));check(target.dataset.revealed==='true');
+  preference.matches=true;changes.reduce();check(disconnected);
+  check(w.document.querySelectorAll('.reveal-ready').length===0);
+  check(w.document.querySelector('[data-tilt]').style.getPropertyValue('--tilt-x')==='');
+ }
+ dom.window.close();
 }
-// No observer means all content remains visible, even on a motion-capable browser.
-const dom = new JSDOM(html,{url:'https://preview.example/',runScripts:'outside-only'});
-dom.window.matchMedia=()=>({matches:false});
-dom.window.eval(script);
-verify(dom.window.document.querySelectorAll('.reveal-ready').length===0);
-verify(dom.window.document.querySelector('.hero').textContent.includes('R59'));
+const dom=new JSDOM(html,{url:'https://preview.example/',runScripts:'outside-only'});
+dom.window.matchMedia=()=>({matches:false});dom.window.eval(script);
+check(dom.window.document.querySelectorAll('.reveal-ready').length===0);
+check(dom.window.document.querySelector('h1').textContent.includes('A home for your site.'));
 dom.window.close();
-console.log(`${assertions} motion assertions passed: reduced motion, reveal completion, preference changes and safe fallback.`);
+console.log(`${checks} motion assertions passed: service reveal, reduced motion, preference change and fallback.`);

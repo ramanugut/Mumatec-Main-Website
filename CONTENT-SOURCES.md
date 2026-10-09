@@ -25,3 +25,6 @@ SSL/TLS explanation uses MDN's HTTPS and TLS documentation: https://developer.mo
 
 ## Owner-confirmed service rules — 9 October 2026
 Marven instructed: remove the personal cell number from the public website; domain purchases require hosting, and hosting requires a domain (new or existing). Website design may use Mumatec hosting or an external host. External-host website setup costs R300 once-off, separate from design. These instructions supersede the earlier standalone-domain journey. The preview still prepares enquiries only.
+
+## Owner-supplied design — 9 October 2026
+Marven supplied Mumatec Hosting Trail.html as the visual source and explicitly retained a multi-page website. Its concept actions have been replaced with the dedicated service pages and full guided setup. Its pricing is tied to site.json; decorative illustrations are not infrastructure photographs or live service status. No new performance guarantee or service offer is inferred from the design.

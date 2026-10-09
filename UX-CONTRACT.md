@@ -1,7 +1,7 @@
 # Mumatec main website contract
 
 ## Scope
-Only the main website is under active review; the client-area rebuild is paused. The pages remain static and are not connected to WHMCS, customer accounts, domain availability, payments, ticket creation, analytics or form storage. Email and phone links open the customer's own applications. A contact or setup request is prepared for review; it is sent only if the customer chooses Send in their email app.
+Only the main website is under active review; the client-area rebuild is paused. The pages remain static and are not connected to WHMCS, customer accounts, domain availability, payments, ticket creation, analytics or form storage. Email links open the customer's own application. A contact or setup request is prepared for review; it is sent only if the customer chooses Send in their email app.
 
 ## Journeys and boundaries
 | Journey | Customer outcome | Clarity / truth boundary |
@@ -16,7 +16,7 @@ Only the main website is under active review; the client-area rebuild is paused.
 | Customer account | Explain account access and provide direct support contact | Portal is not available until the separate client-area work is complete; collect no credentials |
 
 ## Layout and accessibility
-Main navigation collapses below 900 px. Domain search, pricing and support remain easy to find. Hosting packages stack on narrow phones. Form controls are labelled and at least 44 px tall. Search errors stay by their field. Escape closes the mobile menu and restores focus. Billing and estimate changes are announced to assistive technology; FAQs use native details/summary controls. Respect reduced-motion preferences and avoid horizontal overflow at 320 px.
+Main navigation collapses at 1000 px. Domain search, pricing and support remain easy to find. Hosting packages stack on narrow phones. Form controls are labelled and at least 44 px tall. Search errors stay by their field. Escape closes the mobile menu and restores focus. Billing and estimate changes are announced to assistive technology; FAQs use native details/summary controls. Respect reduced-motion preferences and avoid horizontal overflow at 320 px.
 
 ## Verification
 Run static route / asset / anchor / heading checks and interaction assertions before one batched review update. Inspect the deployed normal homepage and customer journeys at desktop and phone widths, check font and image loading, keyboard use and overflow. Report the exact checks performed. Do not infer production readiness or conversion improvement from this review.
@@ -33,3 +33,7 @@ Every visible line must help a customer understand an offer, choose a service, t
 | Feedback | Inline status and alert regions | public/assets/site.js, public/assets/setup.js | Error beside decision; summary stays editable; email app handoff | Invalid domain, incomplete steps, edit and restore tests |
 
 Guided setup uses only tab-scoped session storage for service choices and a domain name. No credentials, names or contact details are collected. Start again clears the choices. Domain registration includes a hosting selection; email setup omits website design/SSL; existing services are not charged again. Quotes remain separate from known monthly, annual and once-off guide prices.
+
+
+## Owner-supplied trail design
+The homepage is a scrolling introduction, while services retain dedicated URLs and page-specific content. Marketing trail positions indicate reading progress only; they must never imply an order, deployment or live website. The homepage plan finder action opens the full guided service setup. Mobile guide introductions remain compact, and Continue follows choices without overlapping them.

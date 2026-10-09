@@ -9,7 +9,8 @@ def make_pages(ctx):
     def guide(label='Build my setup',goal=''):
         return btn(label,'setup.html'+('?goal='+goal if goal else ''),True)
     def server():
-        return '<div class="rack-scene"><div class="rack-label">A HOME FOR YOUR WEBSITE</div>'+''.join(f'<div class="rack-unit"><span class="rack-light"></span><strong>{label}</strong><div class="rack-slots"><i></i><i></i><i></i></div></div>' for label in ['Your website files','Your business email','Your next project'])+'<div class="rack-base"></div><div class="scene-chip chip-copper">15–60 GB <span>NVMe storage</span></div><div class="scene-chip chip-mint">cPanel <span>You’re in control</span></div></div>'
+        slabs=''.join(f'<div class="service-slab" style="--i:{n}"><i class="t"></i><i class="f">{label}</i><i class="r"></i><i class="l"></i></div>' for n,label in enumerate(['NVME','LITESPEED','EMAIL','CPANEL']))
+        return '<div class="service-rack-wrap"><div class="service-rack">'+slabs+'</div><div class="scene-chip chip-copper">15–60 GB <span>NVMe storage</span></div><div class="scene-chip chip-mint">cPanel <span>You’re in control</span></div></div>'
     def domain_visual():
         return f'<div class="domain-world"><div class="world-ring"></div><div class="world-core">{icon("domain")}</div><div class="address-slab"><small>YOUR ADDRESS ONLINE</small><strong>yourbusiness<span>.co.za</span></strong></div><div class="scene-chip chip-copper">.com <span>Go beyond borders</span></div><div class="scene-chip chip-mint">.co.za <span>Made for South Africa</span></div></div>'
     def mail_visual():
@@ -27,7 +28,7 @@ def make_pages(ctx):
     def domains():
         original_rest=rest('domains')
         original_rest=original_rest.replace(ctx['domain_panel'](),'<div class="domain-explain card"><p class="eyebrow">One name. Two uses.</p><h3>yourbusiness.co.za</h3><p>Your website address.</p><h3>hello@yourbusiness.co.za</h3><p>Your business email address.</p><p>The domain is your name. Hosting stores your website and email.</p>'+guide('Help me choose','domain')+'</div>')
-        return hero('domains','Domain names','Your name.<br><span>Your place online.</span>','Choose an address people can remember. Connect it to your website and email, or keep the domain you already own.',btn('I already have a domain','domain-search.html?mode=transfer'),domain_visual(),ctx['domain_form']())+original_rest
+        return hero('domains','Domain names','Your name.<br><span>Your place online.</span>','Choose an address people can remember, with hosting for your website and email. New registrations come with Mumatec hosting. Already own a domain? Connect it to your plan.',btn('I already have a domain','domain-search.html?mode=transfer'),domain_visual(),ctx['domain_form']())+original_rest
     def email():
         return hero('email','Business email','Your name.<br><span>In every inbox.</span>','Send quotes, invoices and replies from your business domain. Give your team addresses that customers recognise.',guide('Plan my business email','email')+btn('Compare hosting','hosting.html#hosting-plans'),mail_visual(),'<ul class="hero-proof"><li>Email accounts included in hosting</li><li>Help planning a move</li></ul>')+rest('email')
     def design_content():
@@ -50,3 +51,4 @@ def make_pages(ctx):
     def policies():
         return hero('policies','Pricing & service details','Clear choices.<br><span>No hidden assumptions.</span>','Know how billing works, what each service includes and which costs are separate before setting up your business.',btn('Compare hosting','hosting.html#hosting-plans',True)+btn('Ask about service terms','contact.html'),contact_visual())+rest('policies')
     return locals() | {'design':design}
+
