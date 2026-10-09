@@ -208,3 +208,80 @@ if (enquiryForm) {
   enquiryForm.addEventListener('change', resetPreparedMessage);
   enquiryForm.addEventListener('reset', resetPreparedMessage);
 }
+
+// Progressive visual enhancement: no dependencies, scroll interception or render loop.
+(() => {
+  if (!window.matchMedia) return;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+  let observer;
+  let journeyObserver;
+  const journey = document.querySelector('[data-journey]');
+  const revealTargets = [...document.querySelectorAll('.section-heading, .foundation-visual, .foundation-detail, .home-service-cards, .local-card, .portfolio-grid, .journey-step')];
+  const art = document.querySelector('[data-tilt]');
+  let frame = 0;
+  let bounds;
+  let pointer;
+  const resetTilt = () => {
+    if (frame) cancelAnimationFrame(frame);
+    frame = 0;
+    bounds = null;
+    if (art) {
+      art.style.removeProperty('--tilt-x');
+      art.style.removeProperty('--tilt-y');
+    }
+  };
+  const configure = () => {
+    if (observer) observer.disconnect();
+    if (journeyObserver) journeyObserver.disconnect();
+    if (journey) {
+      delete journey.dataset.activeStage;
+      journey.querySelectorAll('.is-current').forEach(el => el.classList.remove('is-current'));
+    }
+    revealTargets.forEach(el => el.classList.remove('reveal-ready'));
+    resetTilt();
+    if (reduced.matches || !('IntersectionObserver' in window)) return;
+    observer = new IntersectionObserver(entries => {
+      entries.forEach(({target,isIntersecting}) => {
+        if (!isIntersecting) return;
+        target.classList.add('is-visible');
+        observer.unobserve(target);
+      });
+    }, {threshold: .08, rootMargin: '0px 0px 30px 0px'});
+    if (journey) {
+      journeyObserver = new IntersectionObserver(entries => {
+        entries.filter(entry => entry.isIntersecting).forEach(({target}) => {
+          journey.dataset.activeStage = target.dataset.stage;
+          journey.querySelectorAll('[data-stage]').forEach(step => step.classList.toggle('is-current', step === target));
+        });
+      }, {rootMargin: '-25% 0px -40% 0px', threshold: 0});
+      journey.querySelectorAll('[data-stage]').forEach(step => journeyObserver.observe(step));
+    }
+    revealTargets.forEach(el => {
+      // Only offscreen sections reveal. Already visible content is never hidden.
+      if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('is-visible');
+      observer.observe(el);
+      el.classList.add('reveal-ready');
+    });
+  };
+  if (art) {
+    art.addEventListener('pointerenter', () => { bounds = art.getBoundingClientRect(); });
+    art.addEventListener('pointermove', event => {
+      if (reduced.matches || !fine.matches || document.hidden || !bounds) return;
+      pointer = {x:event.clientX,y:event.clientY};
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        art.style.setProperty('--tilt-x', `${7-(pointer.y-bounds.top-bounds.height/2)/bounds.height*8}deg`);
+        art.style.setProperty('--tilt-y', `${-13+(pointer.x-bounds.left-bounds.width/2)/bounds.width*12}deg`);
+      });
+    });
+    art.addEventListener('pointerleave', resetTilt);
+    window.addEventListener('resize', resetTilt, {passive:true});
+    window.addEventListener('scroll', resetTilt, {passive:true});
+  }
+  document.addEventListener('visibilitychange', () => { if (document.hidden) resetTilt(); });
+  if (reduced.addEventListener) reduced.addEventListener('change', configure);
+  if (fine.addEventListener) fine.addEventListener('change', resetTilt);
+  configure();
+})();
