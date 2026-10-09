@@ -5,16 +5,16 @@
   const form = shell.querySelector('[data-setup-form]');
   const catalogue = JSON.parse(document.querySelector('#service-catalogue').textContent);
   const money = window.Mumatec.formatMoney;
-  const key = 'mumatec-setup-v1';
+  const key = 'mumatec-setup-v2';
   const defaults = () => ({cycle:'monthly', extension:'co.za', ssl:'check', domainAction:'keep'});
   const webGoals = ['start','move','design'];
   const names = {goal:'Your goal',website:'Website',hosting:'Hosting',capacity:'Space',package:'Package',domain:'Domain',email:'Email',ssl:'SSL',review:'Review'};
-  const labels = {start:'Get my business online',move:'Move my website',design:'Have a website built',email:'Set up business email',domain:'Get a domain name',ssl:'Check SSL for my website'};
+  const labels = {start:'Get my business online',move:'Move my website',design:'Have a website built',email:'Set up business email',domain:'Get a domain with hosting',ssl:'Check SSL for my website'};
   let state = defaults();
   let current = 'goal';
   try {
     const saved = JSON.parse(sessionStorage.getItem(key));
-    if (saved?.version === 1 && saved.answers && typeof saved.answers === 'object') {
+    if (saved?.version === 2 && saved.answers && typeof saved.answers === 'object') {
       for (const [name,value] of Object.entries(saved.answers)) {
         if (name === 'domain') { if (typeof value === 'string' && value.length <= 253) state.domain=value; continue; }
         const controls = [...form.querySelectorAll('[name="'+name.replace(/[^a-zA-Z]/g,'')+'"]')];
@@ -26,9 +26,9 @@
   const initialGoal = new URLSearchParams(location.search).get('goal');
   if (Object.hasOwn(labels,initialGoal) && state.goal !== initialGoal) { state={...defaults(),goal:initialGoal}; current='goal'; }
   if (state.goal==='ssl' && !state.domainNeed) state.domainNeed='existing';
-  const save = () => { try { sessionStorage.setItem(key,JSON.stringify({version:1,answers:state,current})); } catch (_) {} };
+  const save = () => { try { sessionStorage.setItem(key,JSON.stringify({version:2,answers:state,current})); } catch (_) {} };
   const hasWebsite = () => webGoals.includes(state.goal);
-  const hostRelevant = () => hasWebsite() || state.goal==='email';
+  const hostRelevant = () => hasWebsite() || ['email','domain'].includes(state.goal);
   const standardCapacity = () => state.sites!=='6+' && state.storage!=='over';
   const recommended = () => {
     if (!standardCapacity() || !state.sites || !state.storage) return null;
@@ -60,6 +60,7 @@
       const value=design ? design.name : state.website==='build' ? (state.design==='custom'?'Custom website / online shop':'Website package to choose') : {existing:'Keep my existing website',self:'I’ll build my website',later:'Decide on a website later'}[state.website];
       items.push({title:'Website',value,edit:'website',detail:design?`${design.pages} pages · 50% deposit; full package price below. Hosting and maintenance are separate.`:state.design==='custom'&&state.website==='build'?'Scope and price by quote.':'',amount:design?.price,term:design?'once':null});
     }
+    if(hasWebsite() && state.website==='build' && state.hosting==='existing') items.push({title:'External-host setup',value:'Website setup on your own host',edit:'hosting',detail:'R300 once-off setup fee, separate from website design.',amount:catalogue.externalHostSetupFee,term:'once'});
     if (hostRelevant() && state.hosting) {
       const plan=selectedPlan();
       const value=plan ? `${plan.name} · ${plan.storage} GB` : state.hosting==='existing'?'Keep current hosting':state.hosting==='quote'?'Discuss hosting / email requirements':'Hosting beyond these packages · quote needed';
@@ -78,7 +79,7 @@
   function element(tag,cls,text) { const el=document.createElement(tag); if(cls)el.className=cls;if(text!==undefined)el.textContent=text;return el; }
   function costs(items) {
     const node=element('div','setup-costs');node.append(element('h3','', 'Known costs'));
-    const groups=[['month','Hosting each month',' / month'],['year','Annual services',' / year'],['once','Website design',' once-off']];
+    const groups=[['month','Hosting each month',' / month'],['year','Annual services',' / year'],['once','Once-off services',' once-off']];
     let known=false;
     for(const [term,label,suffix] of groups) { const relevant=items.filter(i=>i.term===term&&typeof i.amount==='number');if(!relevant.length)continue;known=true;const row=element('div','setup-cost-line');row.append(element('span','',label),element('strong','',money(relevant.reduce((n,i)=>n+i.amount,0))+suffix));node.append(row); }
     node.append(element('p','input-help',known?'Full annual charges and the full website package price are shown. Quotes and unconfirmed costs are excluded.':'No fixed-price service selected yet. We’ll confirm any required quote.'));
@@ -119,6 +120,8 @@
     shell.querySelector('[data-design-options]').hidden=state.website!=='build';
     shell.querySelector('[data-domain-fields]').hidden=!['new','existing'].includes(state.domainNeed);
     shell.querySelector('[data-extension-options]').hidden=state.domainNeed!=='new';
+    const existingHost=form.querySelector('[name=hosting][value=existing]');existingHost.disabled=state.goal==='domain';existingHost.closest('.setup-choice').querySelector('small').textContent=state.goal==='domain'?'New domain purchases must include Mumatec hosting.':state.website==='build'?'Keep your own host. Website setup costs R300 once-off.':'Keep existing hosting; use a domain you already own.';
+    const newDomain=form.querySelector('[name=domainNeed][value=new]');newDomain.disabled=!['mumatec','quote'].includes(state.hosting);const newLabel=newDomain.closest('.setup-choice').querySelector('small');newLabel.textContent=newDomain.disabled?'New registration requires Mumatec hosting. Use an existing domain or change hosting.':'Register your business name together with Mumatec hosting.';
     const transfer=shell.querySelector('[data-domain-action]');if(transfer)transfer.hidden=state.domainNeed!=='existing';
     const recommendation=recommended();
     const info=shell.querySelector('[data-recommendation]');info.textContent=recommendation?`Suggested: ${recommendation.name}. It covers ${state.sites} website${state.sites==='1'?'':'s'}${state.storage==='unsure'?'; storage must still be checked':` and up to ${state.storage} GB`}.`:'A custom hosting quote is needed for these requirements.';
@@ -132,7 +135,7 @@
     const nav=shell.querySelector('[data-step-nav]');nav.replaceChildren();
     list.forEach((step,i)=>{const node=element(i<=index?'button':'span','setup-step-link',names[step]);if(i<=index){node.type='button';node.addEventListener('click',()=>go(step));}if(i===index)node.setAttribute('aria-current','step');nav.append(node);});
     const back=shell.querySelector('[data-setup-back]');back.disabled=index===0;back.hidden=index===0;
-    const prompts={goal:'Start here: choose what you want to do.',website:state.website==='build'?'Choose a website package below.':'Choose whether you need a website built.',hosting:'Choose Mumatec hosting, keep your host, or ask for help.',capacity:'Choose your website count and storage.',package:'Choose your hosting package and billing.',domain:'Choose a new domain, use your own, or decide later.',email:'Choose how you want to handle business email.',ssl:'Choose how to handle HTTPS coverage.',review:'Check your choices, then open your email enquiry.'};
+    const prompts={goal:'Start here: choose what you want to do.',website:state.website==='build'?'Choose a website package below.':'Choose whether you need a website built.',hosting:'Choose Mumatec hosting, keep your host, or ask for help.',capacity:'Choose your website count and storage.',package:'Choose your hosting package and billing.',domain:'Choose a new domain with Mumatec hosting, or use one you own.',email:'Choose how you want to handle business email.',ssl:'Choose how to handle HTTPS coverage.',review:'Check your choices, then open your email enquiry.'};
     shell.querySelector('[data-setup-direction] p').textContent=prompts[current];
     const next=shell.querySelector('[data-setup-next]');next.disabled=false;next.hidden=current==='review';next.textContent=list[index+1]==='review'?'Review my setup →':'Continue →';
     shell.querySelector('[data-setup-save]').disabled=false;shell.querySelector('[data-setup-restart]').disabled=false;
@@ -144,11 +147,12 @@
   function validate(step) {
     if(step==='goal'&&!state.goal)return fail('Choose what you’d like to do.','goal');
     if(step==='website'){if(!state.website)return fail('Choose whether you need a website built.','website');if(state.website==='build'&&!state.design)return fail('Choose a website package or a custom quote.','design');}
-    if(step==='hosting'&&!state.hosting)return fail('Choose where to host, or ask us to check the requirements.','hosting');
+    if(step==='hosting'&&(!state.hosting || (state.goal==='domain'&&state.hosting==='existing')))return fail('Choose where to host, or ask us to check the requirements.','hosting');
     if(step==='capacity'){if(!state.sites)return fail('Choose how many websites you need to host.','sites');if(!state.storage)return fail('Choose the storage you need, or select “I’m not sure”.','storage');}
     if(step==='package'){const plan=selectedPlan(),recommendedPlan=recommended();if(!plan||!recommendedPlan||plan.websites<Number(state.sites)||plan.storage<recommendedPlan.storage)return fail('Choose a package with enough website slots and storage.','plan');}
     if(step==='domain'){
-      if(!state.domainNeed)return fail('Choose a new domain, your existing one, or decide later.','domainNeed');
+      if(!['new','existing'].includes(state.domainNeed))return fail('Choose a new domain or use one you own.','domainNeed');
+      if(state.domainNeed==='new' && !['mumatec','quote'].includes(state.hosting))return fail('New domain registration requires Mumatec hosting. Use an existing domain with your own host, or go back and choose Mumatec hosting.','domainNeed');
       if(state.domainNeed!=='later'){
         let domain=(state.domain||'').trim().toLowerCase();
         if(state.domainNeed==='new'&&domain.includes('.')){const ext=catalogue.domains.find(d=>domain.endsWith('.'+d.extension));if(!ext)return fail('Choose .co.za, .com or .org in this guide, or ask us about another ending.','domain');state.extension=ext.extension;}
@@ -163,6 +167,7 @@
     const input=event.target;if(!input.name)return;clearError();
     if(input.name==='goal'&&state.goal!==input.value){state={...defaults(),goal:input.value};if(input.value==='ssl')state.domainNeed='existing';}
     else state[input.name]=input.value;
+    if(input.name==='hosting' && !['mumatec','quote'].includes(input.value) && state.domainNeed==='new'){delete state.domainNeed;delete state.domain;}
     if(input.name==='website'&&input.value!=='build')delete state.design;
     if(['sites','storage'].includes(input.name)){const plan=selectedPlan(),minimum=recommended();if(!minimum||!plan||plan.websites<Number(state.sites)||plan.storage<minimum.storage)delete state.plan;}
     render();

@@ -4,8 +4,6 @@
   "origin": "https://mumatechosting.co.za",
   "billing": "https://mumatechosting.co.za/billing/",
   "email": "info@mumatechosting.co.za",
-  "phone": "067 735 4792",
-  "phoneHref": "+27677354792",
   "location": "Pretoria, South Africa",
   "hostingPlans": [
     {
@@ -78,5 +76,6 @@
     "email": "index.php?rp=/store/email-hosting",
     "ssl": "index.php?rp=/store/ssl-certificates",
     "design": "index.php?rp=/store/web-design-and-development-packages"
-  }
+  },
+  "externalHostSetupFee": 300
 }

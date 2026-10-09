@@ -6,7 +6,7 @@ The published homepage confirms hosting R59/R79/R120 monthly, 15/30/60 GB NVMe, 
 
 Paid website offers: Pro Start-Up R2599, four pages; Business R3699, six pages; 50% deposit. Hosting/domain/maintenance are separate. Scope and platform are confirmed before work begins. The free-website programme remains excluded under the existing redesign scope.
 
-Contact: 067 735 4792, info@mumatechosting.co.za, Pretoria. About page supports the focus on helping local small businesses and personalised setup guidance. Portfolio links reproduce the four projects listed publicly; no customer quote or performance metric has been invented.
+Contact: info@mumatechosting.co.za, Pretoria. About page supports the focus on helping local small businesses and personalised setup guidance. Portfolio links reproduce the four projects listed publicly; no customer quote or performance metric has been invented.
 
 ## Confirm before public launch
 
@@ -22,3 +22,6 @@ Search-index retrieval of https://mumatechosting.co.za/ and /hosting-process/ re
 
 ## Guided explanations — 9 October 2026
 SSL/TLS explanation uses MDN's HTTPS and TLS documentation: https://developer.mozilla.org/en-US/docs/Glossary/HTTPS and https://developer.mozilla.org/en-US/docs/Glossary/TLS. Certificate scope descriptions use DigiCert's wildcard and multi-domain explanations: https://www.digicert.com/tls-ssl/wildcard-ssl-certificates and https://www.digicert.com/tls-ssl/multi-domain-ssl. These explain the concepts; they are not evidence of Mumatec certificate inclusion or pricing. Guide recommendations use the existing sourced site.json catalogue and still require suitability confirmation, especially for unknown disk use or demanding applications.
+
+## Owner-confirmed service rules — 9 October 2026
+Marven instructed: remove the personal cell number from the public website; domain purchases require hosting, and hosting requires a domain (new or existing). Website design may use Mumatec hosting or an external host. External-host website setup costs R300 once-off, separate from design. These instructions supersede the earlier standalone-domain journey. The preview still prepares enquiries only.

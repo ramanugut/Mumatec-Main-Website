@@ -102,7 +102,7 @@ if (domainResults) {
       const price = make('div', 'domain-result-price');
       price.append(make('strong', '', formatMoney(example.price)), make('span', '', 'per year · guide'));
       const link = make('a', 'btn btn-primary', 'Ask about this domain ↗');
-      link.href = 'checkout.html?plan=domain-only&domain=' + encodeURIComponent(domain) + '&extension=' + encodeURIComponent(example.extension);
+      link.href = 'checkout.html?domain=' + encodeURIComponent(domain) + '&extension=' + encodeURIComponent(example.extension);
       row.append(identity, price, link);
       domainResults.append(row);
     });
@@ -123,7 +123,7 @@ if (checkoutForm) {
   const review = document.querySelector('[data-order-review]');
   const error = checkoutForm.querySelector('.checkout-error');
   const knownPlan = catalogue.hosting.find(item => item.id === parameters.get('plan'));
-  if (knownPlan || parameters.get('plan') === 'domain-only') planField.value = parameters.get('plan');
+  if (knownPlan) planField.value = parameters.get('plan');
   if (parameters.get('cycle') === 'yearly') cycleField.value = 'yearly';
   if (parameters.get('domain')) {
     domainField.value = parameters.get('domain').slice(0, 253);
@@ -139,7 +139,7 @@ if (checkoutForm) {
       checkoutForm.querySelector('[data-checkout-domain-step]').hidden=true;
       const direction=checkoutForm.querySelector('[data-plan-direction]');direction.classList.remove('checkout-plan-confirmed');direction.textContent='Select a service above to unlock the next choices.';
       document.querySelector('[data-summary-package]').textContent='Choose your service first';
-      document.querySelector('[data-summary-storage]').textContent='Hosting or domain only';
+      document.querySelector('[data-summary-storage]').textContent='Choose hosting and connect your domain';
       document.querySelector('[data-summary-cycle]').textContent='';
       document.querySelector('[data-summary-hosting]').textContent='Not selected';
       document.querySelector('[data-summary-domain]').textContent='Not selected';
@@ -150,7 +150,7 @@ if (checkoutForm) {
     checkoutForm.querySelector('[data-checkout-domain-step]').hidden=false;
     checkoutForm.querySelector('.checkout-next').hidden=false;
     planField.removeAttribute('aria-invalid');
-    const domainOnly = planField.value === 'domain-only';
+    const domainOnly = false;
     if (domainOnly) { domainChoice.value = 'register'; cycleField.value = 'yearly'; }
     cycleField.disabled = domainOnly;
     domainChoice.disabled = domainOnly;
@@ -169,9 +169,9 @@ if (checkoutForm) {
     const knownDomainPrice = Boolean(registration && matchingDomain && domainExample && matchingDomain.extension === domainExample.extension);
     const domainPrice = knownDomainPrice ? domainExample.price : 0;
     const hostingPrice = domainOnly ? 0 : plan[cycleField.value];
-    document.querySelector('[data-checkout-domain-fields]').hidden = domainChoice.value === 'later';
+    document.querySelector('[data-checkout-domain-fields]').hidden = false;
     document.querySelector('[data-checkout-extension-field]').hidden = !registration;
-    if (domainField) domainField.required = domainChoice.value !== 'later';
+    if (domainField) domainField.required = true;
     document.querySelector('[data-summary-package]').textContent = domainOnly ? 'Domain registration' : plan.name;
     document.querySelector('[data-summary-storage]').textContent = domainOnly ? (domainName || 'Domain name not selected') : plan.storage + ' GB NVMe SSD · ' + plan.websites + ' websites';
     document.querySelector('[data-summary-cycle]').textContent = yearly ? 'Yearly billing · full annual payment' : 'Monthly billing';
@@ -186,21 +186,21 @@ if (checkoutForm) {
   checkoutForm.addEventListener('change', refreshSummary);
   checkoutForm.addEventListener('submit', event => {
     event.preventDefault();
-    if(!planField.value){error.textContent='Start with step 1: choose hosting or domain only.';error.hidden=false;planField.setAttribute('aria-invalid','true');planField.focus();return;}
+    if(!planField.value){error.textContent='Start with step 1: choose your hosting package.';error.hidden=false;planField.setAttribute('aria-invalid','true');planField.focus();return;}
     planField.removeAttribute('aria-invalid');
     const value = domainField?.value.trim().toLowerCase() || '';
-    const valid = value.length > 0 && value.length <= 253 && value.split('.').every(label => /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label));
-    if (domainChoice.value !== 'later' && !valid) {
+    const valid = isValidDomain(value,true);
+    if (true && !valid) {
       error.hidden = false; error.textContent = 'Enter a valid domain name.';
       domainField.setAttribute('aria-invalid', 'true'); domainField.focus(); return;
     }
     const plan = catalogue.hosting.find(item => item.id === planField.value) || catalogue.hosting[0];
     const yearly = cycleField.value === 'yearly';
-    const domainOnly = planField.value === 'domain-only';
+    const domainOnly = false;
     const selections = [
       domainOnly ? 'Domain registration' : 'Hosting: ' + plan.name + ' · ' + plan.storage + ' GB',
       domainOnly ? 'Billing: yearly' : 'Billing: ' + (yearly ? 'yearly' : 'monthly'),
-      'Domain: ' + (domainChoice.value === 'register' ? value : domainChoice.value === 'existing' ? 'I already have a domain' : 'I will choose later'),
+      'Domain: ' + (domainChoice.value === 'register' ? value : domainChoice.value === 'existing' ? 'Use my existing domain: '+value : 'I will choose later'),
       'Estimated first-term price: ' + document.querySelector('[data-summary-total]').textContent
     ].join('\n');
     const subject = domainOnly ? 'Domain request: ' + value : 'Hosting setup: ' + plan.name;

@@ -67,3 +67,6 @@ The guided setup is a local native form with radio cards, native selects, inline
 
 ## Direction in setup forms — 9 October 2026
 Coral identifies where to act, mint confirms an actual service choice, and numbered fieldsets show the required order. Quick setup starts without an implied hosting purchase when no valid package was handed over. Billing/domain/review sections appear after choosing a service; hosting billing is hidden for domain-only. Each wizard question has a short action instruction and a sticky Continue area with reduced-motion support. Text, numbers and control state carry the same meaning as colour.
+
+## Rich brand blue and visible guidance — 9 October 2026
+Use logo blue #105479, deeper #083950 and saturated teal-blue #087994 across guide entry points, selected cards, primary guide actions and decision panels. Cyan #38a8c8 provides edge highlights. White text on saturated blue carries selected state; visible Selected text and native radio checks avoid relying on colour alone. The guide promotion explains its purpose and has a large white action on a blue panel. Shared desktop header links directly to Help me choose; mobile exposes it in navigation. Remove personal phone links and use business email.
