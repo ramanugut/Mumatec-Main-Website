@@ -1,5 +1,6 @@
 document.documentElement.classList.add('js');
 const toggle = document.querySelector('.menu-toggle');
+if(toggle)toggle.disabled=false;
 const nav = document.querySelector('#site-nav');
 function closeMenu() {
   nav?.classList.remove('is-open');
@@ -19,6 +20,7 @@ document.querySelectorAll('.domain-form').forEach(form => {
   const input = form.querySelector('[name="query"]');
   const error = form.querySelector('.field-error');
   const clear = form.querySelector('.clear-search');
+  if(clear)clear.disabled=false;
   input.addEventListener('input', () => {
     clear.hidden = !input.value; error.textContent = ''; input.removeAttribute('aria-invalid');
   });
@@ -42,6 +44,11 @@ document.querySelectorAll('[data-year]').forEach(node => { node.textContent = St
 const catalogue = JSON.parse(document.querySelector('#service-catalogue')?.textContent || '{"hosting":[],"domains":[]}');
 const parameters = new URLSearchParams(window.location.search);
 const formatMoney = value => 'R' + Number(value).toLocaleString('en-ZA', {minimumFractionDigits: Number.isInteger(Number(value)) ? 0 : 2, maximumFractionDigits: 2});
+function isValidDomain(value,requireEnding=false) {
+  const labels=value.split('.');
+  return value.length>0&&value.length<=253&&(!requireEnding||labels.length>=2)&&labels.every(label=>/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label));
+}
+window.Mumatec = {formatMoney,isValidDomain};
 function updateBilling(cycle) {
   document.querySelectorAll('.plan-card[data-plan]').forEach(card => {
     const plan = catalogue.hosting.find(item => item.id === card.dataset.plan);
@@ -182,6 +189,7 @@ const enquiryForm = document.querySelector('[data-enquiry]');
 if (enquiryForm) {
   const submit = enquiryForm.querySelector('[type="submit"]');
   submit.disabled = false;
+  enquiryForm.querySelector('[type=reset]').disabled=false;
   const service = parameters.get('service');
   if (Array.from(enquiryForm.elements.service.options).some(option => option.value === service)) enquiryForm.elements.service.value = service;
   const feedback = enquiryForm.querySelector('.form-feedback');
@@ -189,6 +197,9 @@ if (enquiryForm) {
   const resetPreparedMessage = () => { feedback.hidden = true; emailLink.hidden = true; };
   enquiryForm.addEventListener('submit', event => {
     event.preventDefault();
+    enquiryForm.querySelectorAll('[aria-invalid]').forEach(field=>field.removeAttribute('aria-invalid'));
+    const invalid=[...enquiryForm.querySelectorAll('[required]')].find(field=>!field.checkValidity()||!field.value.trim());
+    if(invalid){invalid.setAttribute('aria-invalid','true');feedback.textContent=invalid.type==='email'?'Enter a valid email address.':'Complete '+enquiryForm.querySelector('label[for="'+invalid.id+'"]').textContent.toLowerCase()+'.';feedback.hidden=false;emailLink.hidden=true;invalid.setAttribute('aria-describedby','enquiry-feedback');feedback.id='enquiry-feedback';invalid.focus();return;}
     const serviceName = enquiryForm.elements.service.selectedOptions[0].textContent;
     const subject = serviceName + ' enquiry from ' + enquiryForm.elements.name.value.trim();
     const body = [
@@ -217,7 +228,7 @@ if (enquiryForm) {
   let observer;
   let journeyObserver;
   const journey = document.querySelector('[data-journey]');
-  const revealTargets = [...document.querySelectorAll('.section-heading, .foundation-visual, .foundation-detail, .home-service-cards, .local-card, .portfolio-grid, .journey-step')];
+  const revealTargets = [...document.querySelectorAll('.section-heading, .foundation-visual, .foundation-detail, .home-service-cards, .local-card, .portfolio-grid, .journey-step, .cards .card, .steps, .service-explain')];
   const art = document.querySelector('[data-tilt]');
   let frame = 0;
   let bounds;

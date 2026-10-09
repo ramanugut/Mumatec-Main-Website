@@ -23,3 +23,13 @@ Run static route / asset / anchor / heading checks and interaction assertions be
 
 ## Copy standard
 Every visible line must help a customer understand an offer, choose a service, take a next step or avoid a real surprise. Remove interface narration and repeat warnings. Keep any limit next to the decision it affects, and label buttons for the action they open.
+
+## Canonical UI Map
+| Capability | Canonical owner | Source of truth | Allowed variants | Verification |
+| --- | --- | --- | --- | --- |
+| Form | Static builder and local JS validation | scripts/build.py, scripts/setup_page.py, public/assets/site.js, public/assets/setup.js | Domain search, contact, quick estimate, guided setup; novalidate and inline feedback | test_site.cjs and test_setup.cjs |
+| Select/Listbox | Native HTML select | Browser platform, public/assets/brand.css | Website count and service choices; native popup retained for keyboard and mobile | Browser keyboard and narrow-width checks |
+| Scrollbar | Global brand CSS | public/assets/brand.css | Natural document scrolling; no nested scrolling form shell | Static audit and overflow checks |
+| Feedback | Inline status and alert regions | public/assets/site.js, public/assets/setup.js | Error beside decision; summary stays editable; email app handoff | Invalid domain, incomplete steps, edit and restore tests |
+
+Guided setup uses only tab-scoped session storage for service choices and a domain name. No credentials, names or contact details are collected. Start again clears the choices. Domain-only omits hosting/design/email/SSL; email-only omits website design/SSL; existing services are not charged again. Quotes remain separate from known monthly, annual and once-off guide prices.

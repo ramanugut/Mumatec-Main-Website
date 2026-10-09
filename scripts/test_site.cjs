@@ -110,7 +110,7 @@ form.reset(); check(form.querySelector('.form-feedback').hidden,true); win.close
 win=page('account.html'); doc=win.document;
 check(doc.querySelector('h2').textContent,'Your customer portal is being prepared.');
 check(doc.querySelectorAll('input').length,0);
-check(doc.querySelectorAll('a[href^="mailto:"]').length,2); win.close();
+check(doc.querySelectorAll('a[href^="mailto:"]').length,3); win.close();
 
 const publicPages = fs.readdirSync(root).filter(name => name.endsWith('.html'));
 const visibleCopy = publicPages.map(name => fs.readFileSync(path.join(root,name),'utf8')).join(' ');

@@ -28,3 +28,5 @@ Batch substantial changes before updating the review branch to limit Vercel depl
 Published hosting prices are R59 / R79 / R120 per month and R638 / R854 / R1 296 per year, for 15 / 30 / 60 GB storage and 2 / 3 / 5 websites. Published website design offers are R2 599 and R3 699. Plan names in this redesign are presentation names, not verified WHMCS product IDs. Preserve the actual annual amounts and calculate savings from them.
 
 The original logo reference, brand colours and token snapshot come from ramanugut/MumatecManager. The user requested the same simple Montserrat text wordmark, retained here in navy and cyan. The portal artwork and workspace images are original generated illustrations, not photographs of Mumatec facilities or customer projects.
+
+The guided service journey is at `/setup.html`; `?goal=domain`, `email`, `design`, `move` or `ssl` supplies a starting goal. Build with `python scripts/build.py`. `scripts/test_setup.cjs` checks branches, package fit, validation, summary costs, edit/restore and domain handling. It requires jsdom for development testing only. See `verification/service-guide.md` for the full review checks.
