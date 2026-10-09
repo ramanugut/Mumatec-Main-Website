@@ -1,0 +1,7 @@
+# Setup direction fix — 9 October 2026
+
+The supplied screenshot showed checkout.html, the quick estimate, rather than the adaptive guide. Replaced tiny stage labels and an ambiguous Hosting package label with a clear journey, coral Start here banner and numbered service/billing/domain fieldsets. Valid package/domain handoffs remain selected. Direct or invalid-package visits require an explicit service choice and show no implied hosting price. The next choices and review action appear only after that selection. Domain-only hides hosting billing and renumbers the domain choice. Mint confirmation states the selected service and the next action. The review journey indicator changes only when review is opened, and resets when choices change.
+
+Guided setup also has coral instructions above each question, a coloured current step, a text Selected marker alongside the mint radio state and sticky navigation. Native forms/keyboard controls are retained. No new runtime dependency or image.
+
+Checks: 18-page static route/asset/heading/isolation validation; JS syntax; 61 interaction, 37 guide and 13 motion assertions. 48 Chromium assertions cover quick-setup and guide layouts at 320/390/768/1440 px, initial service choice, hidden subsequent sections, hosting/domain transitions, enlarged text and overflow. Desktop and phone screenshots inspected. Fixed summary wrapping at 200% text. One preview-branch update, no production merge or billing integration.

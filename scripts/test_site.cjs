@@ -94,7 +94,7 @@ check(doc.querySelector('[data-summary-total]').textContent,'R335');
 check(doc.querySelector('[data-summary-hosting]').textContent,'Not added');
 check(doc.querySelector('[data-summary-domain]').textContent,'R335 / year'); win.close();
 win=page('checkout.html','?plan=not-a-product&cycle=bad&extension=bad'); doc=win.document;
-check(doc.querySelector('[data-summary-total]').textContent,'R59'); win.close();
+check(doc.querySelector('[data-summary-total]').textContent,'—'); win.close();
 
 win=page('contact.html','?service=domain-transfer'); doc=win.document; form=doc.querySelector('[data-enquiry]');
 check(form.elements.service.value,'domain-transfer');

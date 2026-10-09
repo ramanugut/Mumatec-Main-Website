@@ -131,11 +131,35 @@ if (checkoutForm) {
   }
   if (catalogue.domains.some(item => item.extension === parameters.get('extension'))) extensionField.value = parameters.get('extension');
   function refreshSummary() {
+    const stages=document.querySelectorAll('.checkout-steps li');
+    stages[0]?.classList.remove('is-complete');stages[0]?.setAttribute('aria-current','step');stages[1]?.classList.remove('active');stages[1]?.removeAttribute('aria-current');
+    if(!planField.value){
+      checkoutForm.querySelector('.checkout-next').hidden=true;
+      checkoutForm.querySelector('[data-checkout-billing]').hidden=true;
+      checkoutForm.querySelector('[data-checkout-domain-step]').hidden=true;
+      const direction=checkoutForm.querySelector('[data-plan-direction]');direction.classList.remove('checkout-plan-confirmed');direction.textContent='Select a service above to unlock the next choices.';
+      document.querySelector('[data-summary-package]').textContent='Choose your service first';
+      document.querySelector('[data-summary-storage]').textContent='Hosting or domain only';
+      document.querySelector('[data-summary-cycle]').textContent='';
+      document.querySelector('[data-summary-hosting]').textContent='Not selected';
+      document.querySelector('[data-summary-domain]').textContent='Not selected';
+      document.querySelector('[data-summary-total]').textContent='—';
+      document.querySelector('[data-summary-renewal]').textContent='Your price guide appears after you choose a service.';
+      review.hidden=true;error.hidden=true;return;
+    }
+    checkoutForm.querySelector('[data-checkout-domain-step]').hidden=false;
+    checkoutForm.querySelector('.checkout-next').hidden=false;
+    planField.removeAttribute('aria-invalid');
     const domainOnly = planField.value === 'domain-only';
     if (domainOnly) { domainChoice.value = 'register'; cycleField.value = 'yearly'; }
     cycleField.disabled = domainOnly;
     domainChoice.disabled = domainOnly;
     const plan = catalogue.hosting.find(item => item.id === planField.value) || catalogue.hosting[0];
+    checkoutForm.querySelector('[data-checkout-billing]').hidden=domainOnly;
+    checkoutForm.querySelector('[data-domain-step-number]').textContent=domainOnly?'2':'3';
+    const direction=checkoutForm.querySelector('[data-plan-direction]');
+    direction.classList.add('checkout-plan-confirmed');
+    direction.textContent=domainOnly?'✓ Domain only selected. Next: enter the name you want below.':'✓ '+plan.name+' selected. Next: choose hosting billing below.';
     const yearly = cycleField.value === 'yearly';
     const registration = domainChoice.value === 'register';
     const domainName = (domainField?.value || '').trim().toLowerCase();
@@ -162,6 +186,8 @@ if (checkoutForm) {
   checkoutForm.addEventListener('change', refreshSummary);
   checkoutForm.addEventListener('submit', event => {
     event.preventDefault();
+    if(!planField.value){error.textContent='Start with step 1: choose hosting or domain only.';error.hidden=false;planField.setAttribute('aria-invalid','true');planField.focus();return;}
+    planField.removeAttribute('aria-invalid');
     const value = domainField?.value.trim().toLowerCase() || '';
     const valid = value.length > 0 && value.length <= 253 && value.split('.').every(label => /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label));
     if (domainChoice.value !== 'later' && !valid) {
@@ -181,6 +207,8 @@ if (checkoutForm) {
     const body = 'Hello Mumatec,\n\nI’d like to ask about this setup:\n' + selections + '\n\nPlease confirm availability, the current total and renewal terms before setup.\n\nThank you.';
     document.querySelector('[data-request-link]').href = 'mailto:' + (catalogue.email || 'info@mumatechosting.co.za') + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
     review.hidden = false; review.focus();
+    const stages=document.querySelectorAll('.checkout-steps li');
+    stages[0]?.classList.add('is-complete');stages[0]?.removeAttribute('aria-current');stages[1]?.classList.add('active');stages[1]?.setAttribute('aria-current','step');
   });
   refreshSummary();
 }

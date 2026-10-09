@@ -132,6 +132,8 @@
     const nav=shell.querySelector('[data-step-nav]');nav.replaceChildren();
     list.forEach((step,i)=>{const node=element(i<=index?'button':'span','setup-step-link',names[step]);if(i<=index){node.type='button';node.addEventListener('click',()=>go(step));}if(i===index)node.setAttribute('aria-current','step');nav.append(node);});
     const back=shell.querySelector('[data-setup-back]');back.disabled=index===0;back.hidden=index===0;
+    const prompts={goal:'Start here: choose what you want to do.',website:state.website==='build'?'Choose a website package below.':'Choose whether you need a website built.',hosting:'Choose Mumatec hosting, keep your host, or ask for help.',capacity:'Choose your website count and storage.',package:'Choose your hosting package and billing.',domain:'Choose a new domain, use your own, or decide later.',email:'Choose how you want to handle business email.',ssl:'Choose how to handle HTTPS coverage.',review:'Check your choices, then open your email enquiry.'};
+    shell.querySelector('[data-setup-direction] p').textContent=prompts[current];
     const next=shell.querySelector('[data-setup-next]');next.disabled=false;next.hidden=current==='review';next.textContent=list[index+1]==='review'?'Review my setup →':'Continue →';
     shell.querySelector('[data-setup-save]').disabled=false;shell.querySelector('[data-setup-restart]').disabled=false;
     shell.querySelector('[data-setup-explainer]').classList.remove('explainer-arrive');renderExplanation();renderSummary();save();
