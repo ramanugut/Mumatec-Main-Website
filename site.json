@@ -1,0 +1,81 @@
+{
+  "name": "Mumatec Hosting",
+  "mode": "review",
+  "origin": "https://mumatechosting.co.za",
+  "billing": "https://mumatechosting.co.za/billing/",
+  "email": "info@mumatechosting.co.za",
+  "location": "Pretoria, South Africa",
+  "hostingPlans": [
+    {
+      "id": "start-up-15",
+      "name": "Start-Up 15",
+      "monthly": 59,
+      "yearly": 638,
+      "storage": 15,
+      "websites": 2,
+      "databases": "20",
+      "description": "For a business website and everyday email, with room for a second site.",
+      "fit": "Start your business"
+    },
+    {
+      "id": "start-up-30",
+      "name": "Start-Up 30",
+      "monthly": 79,
+      "yearly": 854,
+      "storage": 30,
+      "websites": 3,
+      "databases": "30",
+      "description": "For more website content, more email and up to three websites.",
+      "fit": "Build your presence"
+    },
+    {
+      "id": "start-up-60",
+      "name": "Start-Up 60",
+      "monthly": 120,
+      "yearly": 1296,
+      "storage": 60,
+      "websites": 5,
+      "databases": "Unlimited",
+      "description": "For several websites and a team that needs more shared storage.",
+      "fit": "Make room for more"
+    }
+  ],
+  "designPlans": [
+    {
+      "id": "pro-start-up",
+      "name": "Pro Start-Up",
+      "price": 2599,
+      "pages": 4,
+      "description": "A focused website that introduces your business and makes contacting you easy."
+    },
+    {
+      "id": "business",
+      "name": "Business",
+      "price": 3699,
+      "pages": 6,
+      "description": "More room for your services, brand story and customer enquiries."
+    }
+  ],
+  "domainExamples": [
+    {
+      "extension": "co.za",
+      "price": 90.5
+    },
+    {
+      "extension": "com",
+      "price": 335
+    },
+    {
+      "extension": "org",
+      "price": 323
+    }
+  ],
+  "catalogue": {
+    "monthly": "index.php?rp=/store/hosting-packages-monthly",
+    "yearly": "index.php?rp=/store/hosting-packages-yearly",
+    "email": "index.php?rp=/store/email-hosting",
+    "ssl": "index.php?rp=/store/ssl-certificates",
+    "design": "index.php?rp=/store/web-design-and-development-packages"
+  },
+  "externalHostSetupFee": 300
+}

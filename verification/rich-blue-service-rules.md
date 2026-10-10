@@ -1,0 +1,9 @@
+# Rich-blue guide and owner-confirmed service rules — 9 October 2026
+
+Personal phone data removed from site.json, all public pages and tel links. Contact/support use business email. The guide is a prominent rich logo-blue feature in the shared desktop header, mobile menu and hosting/home plan area. Selected guide cards use saturated blue with white text, visible Selected labels and native radio state. Cyan edge highlights and deeper blue illustrations preserve gloss. Compact phone intro leaves more room for the current question.
+
+New domain registration requires Mumatec hosting; no domain-only quick-estimate option remains. Hosting requires a valid new or existing domain. Domain-search links carry the name into a hosting selection. The guide's domain goal includes hosting and new registration is disabled with an external host; validation also rejects an incompatible state. Old saved selections use a retired storage version and cannot bypass the new rules. Existing domains are not charged for a new registration.
+
+Website design supports Mumatec hosting or an external host. The owner-confirmed R300 once-off external-host setup fee appears as a separate service and in once-off totals. It disappears when Mumatec hosting is chosen. Website and service-information pages state the same fee.
+
+Verification: 18 HTML documents passed static route/asset/heading/isolation checks; 63 general interaction, 64 guided-setup/privacy and 13 motion assertions passed. JavaScript syntax checks passed. Chromium passed 150 checks across all 18 pages at 320/390/768/1440 px, including absence of phone links, fee application, mobile guide access and enlarged text. Desktop guide/blue promotion/review and phone guide screenshots were inspected. No new runtime dependency, image, WebGL, video or continuous animation loop. One review-branch update; production and payments remain disconnected.
