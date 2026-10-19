@@ -1,0 +1,24 @@
+/* MumatecManager DESIGN.md → portable Mumatec tokens. Shared with the client area. */
+:root {
+  --bg: #f0f6f9; --card-bg: #ffffff; --card2: #eaf2f6; --line: #d5e3eb;
+  --tx: #12364a; --tx2: #4e6777; --tx3: #5e7381; --ac: #105479;
+  --cyan: #38a8c8; --acbg: #e0f2f8; --on-ac: #ffffff;
+  --ok: #14804a; --wn: #8a5a05; --dn: #b3261e;
+  --okbg: #dcf4e6; --wnbg: #fbefd2; --dnbg: #fbe2e0;
+  --radius: 14px; --control-radius: 10px;
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Arial', 'Helvetica Neue', sans-serif;
+  --shadow: 0 8px 24px rgb(16 84 121 / 6%), inset 0 1px 0 rgb(255 255 255 / 85%);
+  --scrollbar-thumb: #8ba9ba; --scrollbar-track: #eaf2f6; --scrollbar-hover: #4e6777;
+}
+* { box-sizing: border-box; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); scrollbar-width: thin; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+*::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border: 2px solid var(--scrollbar-track); border-radius: 8px; }
+*::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-hover); }
+*::-webkit-scrollbar-thumb:active { background: var(--ac); }
+:focus-visible { outline: 3px solid var(--ac); outline-offset: 4px; }
+button, a, summary { cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: .6; }
+@media (forced-colors: active) { * { scrollbar-color: auto; } :focus-visible { outline-color: Highlight; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }

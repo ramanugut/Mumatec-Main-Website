@@ -1,0 +1,33 @@
+/* AI website draft studio, matched to Mumatec's restored navy and cyan palette. */
+.ai-promo{background:linear-gradient(120deg,#082b45,#105479 75%,#087994);color:#fff;padding:65px 0;overflow:hidden}
+.ai-promo .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(25px,5vw,70px);align-items:center}
+.ai-promo .eyebrow{color:#a0ebfa}.ai-promo h2{color:#fff;font-size:clamp(33px,4vw,54px);line-height:1.1;letter-spacing:-.04em;margin:14px 0 18px}
+.ai-promo p{color:#e0f0f6;font-size:16px;line-height:1.7}.ai-promo .ai-benefits{display:flex;flex-wrap:wrap;gap:9px;margin-top:23px}
+.ai-promo .ai-benefits span{border:1px solid #ffffff35;border-radius:99px;padding:8px 12px;font-size:12px;color:#fff}
+.ai-form{background:#fff;border:1px solid #d3e7f0;padding:26px;border-radius:20px;box-shadow:0 22px 40px #00182f55}
+.ai-form label{display:block;color:#12364a;font-size:15px;font-weight:800;margin-bottom:12px}
+.ai-form textarea,.ai-studio textarea{display:block;width:100%;min-height:145px;border:1px solid #a6c4d1;border-radius:12px;padding:16px;color:#12364a;background:#fff;line-height:1.6;font:inherit;resize:vertical}
+.ai-form textarea:focus,.ai-studio textarea:focus{outline:3px solid #38a8c855;outline-offset:2px;border-color:#087994}
+.ai-example{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.ai-example button{background:#e5f3f9;color:#105479;border:1px solid #bfdce9;border-radius:9px;font-size:12px;font-weight:750;cursor:pointer;padding:9px 12px}
+.ai-example button:hover{background:#d5ebf5}.ai-form .btn{background:#b54b2b;border-color:#b54b2b;color:#fff}
+.ai-form .btn:hover{background:#94381e;border-color:#94381e;color:#fff}.ai-form .ai-fine{color:#536b7c;font-size:12px;margin:13px 0 0}
+.ai-studio{background:#f1f7fa;padding:36px 0 70px}.ai-studio-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.35fr);gap:22px;align-items:start}
+.ai-panel{padding:24px;background:#fff;border:1px solid #cce0ea;border-radius:18px;box-shadow:0 9px 25px #0d365111;min-width:0}
+.ai-panel h2{font-size:24px;margin:0 0 14px}.ai-panel>p{color:#506d7e;line-height:1.65;font-size:14px;margin-bottom:20px}
+.ai-studio label{display:block;font-weight:800;font-size:15px;color:#12364a;margin-bottom:10px}
+.ai-studio textarea{min-height:195px}.ai-studio #ai-create{width:100%;margin-top:16px;background:linear-gradient(135deg,#105479,#087994);color:#fff;border-color:#105479}
+.ai-studio #ai-create:disabled{opacity:.6;cursor:progress}
+.ai-studio #ai-message{font-size:13px;color:#155e49;font-weight:700;line-height:1.5;margin:16px 0 0;min-height:18px}
+.ai-preview-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}.ai-preview-bar h2{margin:0;font-size:23px}
+.ai-preview-bar button{border:1px solid #bfd2de;background:#f2f7fa;padding:9px 13px;border-radius:8px;color:#12364a;cursor:pointer}
+.ai-preview-bar button[aria-pressed=true]{background:#105479;color:#fff}.ai-preview-surface{min-height:495px;background:#d9e8ef;border-radius:14px;padding:9px;text-align:center}
+.ai-preview-surface iframe{width:100%;height:480px;border:0;background:#fff;border-radius:8px;display:block;margin:auto;transition:width .2s}
+.ai-preview-surface iframe.phone{width:min(100%,370px)}.ai-preview-empty{display:grid;place-content:center;min-height:465px;color:#526e7f;padding:25px}
+.ai-preview-empty strong{color:#12364a;font-size:20px}.ai-preview-empty p{max-width:33ch;line-height:1.6}
+.ai-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:20px}.ai-actions .btn{flex:1;text-align:center}
+.ai-note{font-size:12px;line-height:1.6;color:#567084;margin-top:17px}
+[hidden]{display:none!important}
+@media(max-width:900px){.ai-promo .wrap,.ai-studio-grid{grid-template-columns:1fr}.ai-promo h2{font-size:36px}}
+@media(max-width:600px){.ai-promo{padding:44px 0}.ai-form{padding:19px}.ai-form .btn{width:100%}.ai-studio{padding:22px 0 45px}.ai-panel{padding:18px}.ai-studio textarea{min-height:150px}.ai-actions .btn{flex:auto;width:100%}.ai-preview-surface iframe{height:410px}}
+@media(prefers-reduced-motion:reduce){.ai-preview-surface iframe{transition:none}}
