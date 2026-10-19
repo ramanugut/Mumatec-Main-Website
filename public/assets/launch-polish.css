@@ -1,0 +1,34 @@
+/* Mumatec: premium, high-contrast October 2026 launch */
+:root{--launch-deep:#082d45;--launch-blue:#105479;--launch-cyan:#219bc2;--launch-warm:#ec9b66}
+body{background:#f8fbfd}
+.site-header{background:rgba(255,255,255,.96);box-shadow:0 6px 25px #0c3b5810;backdrop-filter:saturate(150%) blur(16px)}
+.header-inner{gap:clamp(12px,1.7vw,28px)}
+.header-account{color:#105479;text-decoration:none;font-size:13px;font-weight:800;white-space:nowrap;padding:10px 12px;background:#e8f6fb;border-radius:10px}
+.header-account:hover{background:#cff0fa;color:#073e5b}
+.hero-copy h1{letter-spacing:-.065em;text-wrap:balance}
+.hero-copy .lead{max-width:540px;line-height:1.7}
+.btn{transition:transform .2s ease,box-shadow .2s ease,background-color .2s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+.domain-dock{box-shadow:0 22px 60px #0a344e1c;border-radius:24px}
+.plan-card{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;box-shadow:0 10px 34px #0a344e0c}
+.plan-card:hover{transform:translateY(-4px);box-shadow:0 24px 52px #0c46621d;border-color:#8dc8df}
+.plan-price strong{letter-spacing:-.045em}
+.quick-journeys{background:#f8fbfd;padding:clamp(25px,4vw,48px) 0}
+.quick-journeys-inner{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.quick-journey{display:flex;flex-direction:column;gap:9px;min-height:168px;padding:24px 26px;border:1px solid #cfe6ee;border-radius:20px;background:linear-gradient(150deg,#fff,#f5fbfd);color:#10374c;text-decoration:none;box-shadow:0 8px 25px #1239500b;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.quick-journey:hover,.quick-journey:focus-visible{transform:translateY(-3px);border-color:#1e9ec2;box-shadow:0 18px 35px #0c46621a}
+.quick-journey .journey-index{font-size:11px;font-weight:800;letter-spacing:.11em;color:#227b99}
+.quick-journey strong{font-size:clamp(17px,1.7vw,21px);line-height:1.28;letter-spacing:-.024em;display:flex;justify-content:space-between;gap:10px}
+.quick-journey strong span{color:#087b9c}
+.quick-journey small{font-size:13px;color:#526f7e;line-height:1.5}
+.quick-journey:last-child{background:linear-gradient(130deg,#105479,#07334c);color:#fff;border-color:#1c7594}
+.quick-journey:last-child .journey-index{color:#98e1f8}
+.quick-journey:last-child strong span{color:#ffc196}
+.quick-journey:last-child small{color:#e0f2f8}
+.ai-promo .ai-form{box-shadow:0 26px 62px #001b3266}
+.order-review .actions{display:flex;flex-wrap:wrap;gap:12px}
+.order-review .actions a{max-width:100%}
+@media(max-width:1100px){.header-account{display:none}.quick-journeys-inner{gap:11px}.quick-journey{padding:20px 19px}}
+@media(max-width:760px){.quick-journeys-inner{grid-template-columns:1fr}.quick-journey{min-height:auto;padding:21px}.domain-dock{border-radius:17px}.hero-copy h1{letter-spacing:-.045em}.plan-card:hover{transform:none}.order-review .actions{flex-direction:column}.order-review .actions .btn{width:100%;text-align:center}}
+@media(prefers-reduced-motion:reduce){.btn,.plan-card,.quick-journey{transition:none!important;transform:none!important}}
